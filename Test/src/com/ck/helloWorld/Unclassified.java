@@ -2,17 +2,18 @@ package com.ck.helloWorld;
 
 import java.util.Scanner;
 
+//Scaner用法
+//用==判断字符串和equals判断的区别
+//反编译 java -- class
+//for循环快捷键
 public class Unclassified {
+
     public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
+        int[] numbers = {1, 2, 3, 4};
 
-        System.out.println("使用nextLine方式接收：");
+        
 
-        if(scanner.hasNextLine()){
-            String str = scanner.nextLine();
-            System.out.println("输出的内容为：" +str);
-        }
 
-        scanner.close();
     }
+
 }

@@ -13,6 +13,6 @@ public class HasNextLine {
             System.out.println("输出的内容为：" + str);
         }
 
-        scanner.close();
+        scanner.close(); //必须要有！！
     }
 }
