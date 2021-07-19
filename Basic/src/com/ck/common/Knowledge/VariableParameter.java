@@ -1,0 +1,27 @@
+package com.ck.common.Knowledge;
+
+import java.util.Arrays;
+
+//可变参数
+public class VariableParameter {
+
+    public static void main(String[] args) {
+        test(1,2,3);
+    }
+
+    /**
+     *
+     * @param numbers 可变参数，是个数组，需要放到形参列表的最后
+     */
+    public static void  test(int... numbers){
+
+        System.out.println("输入的参数个数为：" + numbers.length);
+
+        System.out.println("打印：");
+
+        for (int number : numbers) {
+            System.out.println(number);
+        }
+
+    }
+}
