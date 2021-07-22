@@ -18,8 +18,40 @@ public class EightDataTypes {
          *  字符： char
          *  布尔： boolean
          */
-        // 获取位数：
-        System.out.println(Byte.SIZE);
+        // 获取位数、最大值、最小值
+        // 数值类型才可获得最大值和最小值
+
+        // 四种整型：
+
+        // byte
+        System.out.println(Byte.SIZE); // 8
+        System.out.println(Byte.MAX_VALUE); // 127
+        System.out.println(Byte.MIN_VALUE); // -128
+
+        // Short
+        System.out.println(Short.SIZE); // 16
+        System.out.println(Short.MAX_VALUE); // 32767
+        System.out.println(Short.MIN_VALUE); // -32768
+
+        // int
+        System.out.println(Integer.SIZE); // 32
+        System.out.println(Integer.MAX_VALUE); // 2147483647
+        System.out.println(Integer.MIN_VALUE); // -2147483648
+
+        // long
+        System.out.println(Long.SIZE); // 64
+        System.out.println(Long.MAX_VALUE); // 9223372036854775807
+        System.out.println(Long.MIN_VALUE); // -9223372036854775808
+
+        // 两种浮点型
+        // double
+        System.out.println(Float.SIZE); // 32
+        System.out.println(Float.MAX_VALUE); // 3.4028235E38
+        System.out.println(Float.MIN_VALUE); // 1.4E-45
+
+
+
+
 
         // 使用方法：
         byte a1 = 100;
