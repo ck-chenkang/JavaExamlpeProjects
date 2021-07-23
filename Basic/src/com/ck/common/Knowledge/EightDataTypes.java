@@ -1,4 +1,4 @@
-package com.ck.basicTypes;
+package com.ck.common.Knowledge;
 
 import sun.tools.tree.DoubleExpression;
 
