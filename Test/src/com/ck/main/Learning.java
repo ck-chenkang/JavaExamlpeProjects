@@ -13,6 +13,7 @@ package com.ck.main;
 //static
 //抽象类
 //接口
+// == 与 equal的区别
 /**
  *
  */
