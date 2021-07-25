@@ -34,7 +34,9 @@ public class ObjectClass {
          * String s = new String("");
          * System.out.println(s.getClass()); // class java.lang.String
          *
-         *
+         *hashCode()
+         * 如果两个对象的哈希码值不同，那这两个对象一定不等；
+         * 如果两个对象的哈希码值相同，不能确保这两个对象一定相等。
          */
 
         Object o = new Object();

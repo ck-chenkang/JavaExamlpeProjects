@@ -1,15 +1,5 @@
 package com.ck.main;
 
-// java 都是栈机制
-// 匿名代码块 static代码快
-// java面向对象，封装、继承、多态
-//instanceof
-//静态倒入包
-//final
-//static
-//抽象类
-//接口
-
 import java.util.ArrayList;
 import java.util.List;
 

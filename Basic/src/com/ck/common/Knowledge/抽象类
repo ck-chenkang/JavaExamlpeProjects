@@ -1,0 +1,71 @@
+参考链接：https://blog.csdn.net/mal327/article/details/7332110
+
+抽象类：在类中，没有方法体的是抽象方法，前面有关键字abstract
+抽象方法：含有抽象方法的类，叫抽象类，前面有关键字abstract
+
+1、用abstract修饰一个类，这个类叫做抽象类，用abstract修饰一个方法时，这个方法叫抽象方法
+
+abstract class Animal { //用abstract来定义一个Animal为抽象类
+}
+
+public abstract void enjoy(); //用abstract来定义一个抽象方法"enjoy"
+
+2、含有抽象方法的类必须被声明为抽象类，抽象类必须被继承，抽象方法必须被重写。
+
+3、抽象类不能被实例化
+
+4、抽象方法，只用声明，不需要在声明的时候实现。
+
+例子 ：多态程序，没抽象类的
+class Person {
+public void f() {
+System.out.println("父类");
+}
+}
+
+class Students extends Person {
+public void f() {
+System.out.println("学生类");
+}
+}
+class Teacher extends Person {
+public void f() {
+System.out.println("教师类");
+}
+}
+public class Test3 {
+public static void main(String[] args) {
+Person s = new Students();
+Person t = new Teacher();
+s.f();
+t.f();
+}
+}
+
+抽象类的多态程序：
+abstract class Person {
+public abstract void f();
+}
+
+class Students extends Person {
+public void f() {
+System.out.println("学生类");
+}
+}
+class Teacher extends Person {
+public void f() {
+System.out.println("教师类");
+}
+}
+public class Test3 {
+public static void main(String[] args) {
+Person s = new Students();
+Person t = new Teacher();
+s.f();
+t.f();
+}
+}
+
+
+
+

@@ -1,0 +1,5 @@
+参考链接：https://blog.csdn.net/weixin_43629021/article/details/113998815
+
+import static 包下面的方法名或者属性
+
+这样做可以减少重复输入，在需要反复调用这个的时候，使用

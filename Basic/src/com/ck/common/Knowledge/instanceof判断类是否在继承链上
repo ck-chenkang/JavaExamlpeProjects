@@ -1,0 +1,8 @@
+java 中的instanceof 运算符是用来判断对象是否是 特定类或这个特定类的子类 的一个实例。
+
+用法：
+result = object instanceof class
+参数：
+Result：布尔类型。
+Object：必选项。任意对象表达式。
+Class：必选项。任意已定义的对象类。
