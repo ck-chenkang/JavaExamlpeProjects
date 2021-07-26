@@ -1,0 +1,9 @@
+用于解决浮点型运算精度损失的问题
+1）构造方法
+BigDecimal(String s):通过字符创建BigDecimal对象
+2）成员方法
+add(BigDecimal bi):+
+subtract(BigDecimal bi):-
+multiply(BigDecimal bi):*
+divide(BigDecimal bi):/
+

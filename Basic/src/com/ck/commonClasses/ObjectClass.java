@@ -2,7 +2,7 @@ package com.ck.commonClasses;
 
 // Object类
 // 参考链接：https://blog.csdn.net/weixin_43232955/article/details/89705350
-// 参考链接：https://blog.csdn.net/sugar_no1/article/details/88016599
+// 参考链接：https://blog.csdn.net/sugar_no1/article/details/88016599 【java常见常用类】
 public class ObjectClass {
     public static void main(String[] args) {
         /**

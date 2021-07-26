@@ -1,0 +1,7 @@
+1）构造方法
+BigInteger(String s):通过字符串创建BigInteger对象
+2）成员方法
+add(BigInteger bi):+
+subtract(BigInteger bi):-
+multiply(BigInteger bi):*
+divide(BigInteger bi):/

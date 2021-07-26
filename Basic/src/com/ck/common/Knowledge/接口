@@ -1,2 +1,169 @@
 参考链接：https://blog.csdn.net/wei_zhi/article/details/52738471
 参考链接：https://blog.csdn.net/wei_zhi/article/details/52743109
+什么是接口：是抽象方法的集合
+
+interface A{//定义一个接口
+
+    public static final String MSG = "hello";//全局常量
+    public abstract void print();//抽象方法
+}
+
+接口的使用：
+    1、子类implements接口，一次可以继承多个
+    2、接口中的方法必须全部实现
+    3、具有面向对象的多态性
+
+    范例：
+    package com.wz.interfacedemo;
+
+    interface A{//定义一个接口A
+
+        public static final String MSG = "hello";//全局常量
+
+        public abstract void print();//抽象方法
+    }
+
+    interface B{//定义一个接口B
+
+        public abstract void get();
+    }
+
+    class X implements A,B{//X类实现了A和B两个接口
+
+        @Override
+        public void print() {
+            System.out.println("接口A的抽象方法print()");
+        }
+
+        @Override
+        public void get() {
+            System.out.println("接口B的抽象方法get()");
+        }
+
+    }
+
+    public class TestDemo { //多态
+
+        public static void main(String[] args){
+
+            X x = new X();//实例化子类对象
+            A a = x;//向上转型
+            B b = x;//向上转型
+
+            a.print();
+            b.get();
+        }
+
+    }
+
+    运行结果：
+    接口A的抽象方法print()
+    接口B的抽象方法get()
+
+    也可以这样写：
+    public class TestDemo {
+
+        public static void main(String[] args){
+
+            A a = new X();
+
+            B b = (B) a;
+            b.get();
+
+        }
+
+    }
+
+    运行结果：接口B的抽象方法get()
+
+    public class TestDemo {
+
+        public static void main(String[] args){
+
+            A a = new X();
+
+            B b = (B) a;
+            b.get();
+
+            System.out.println(a instanceof A);
+            System.out.println(a instanceof B);
+
+        }
+
+    }
+
+    运行结果
+    接口B的抽象方法get()
+    true
+    true
+
+    interface A{//定义一个接口A
+
+        public static final String MSG = "hello";//全局常量
+
+        public abstract void print();//抽象方法
+    }
+
+    interface B{//定义一个接口B
+
+        public abstract void get();
+    }
+
+    abstract class C{//定义一个抽象类C
+        public abstract void change();
+    }
+
+    class X extends C implements A,B{//X类继承C类，并实现了A和B两个接口
+
+        @Override
+        public void print() {
+            System.out.println("接口A的抽象方法print()");
+        }
+
+        @Override
+        public void get() {
+            System.out.println("接口B的抽象方法get()");
+        }
+
+        @Override
+        public void change() {
+            System.out.println("抽象类C的抽象方法change()");
+
+        }
+
+    }
+
+    接口的应用一：工厂设计模式：
+
+    接口定义后，类实现，工厂类中，根据传进来的参数，生成相关对象，具体参考链接2
+
+    接口可以继承吗？
+
+    接口可以继承，而且是多继承：
+
+    interface A{
+        void a1();
+    }
+
+    interface B{
+        void b1();
+    }
+
+    interface C extends A,B{//注意该语法只对接口的继承是合法的
+        void c1();
+    }
+
+    class D implements C{
+
+        @Override
+        public void a1() {}
+
+        @Override
+        public void b1() {}
+
+        @Override
+        public void c1() {}
+    }
+
+
+

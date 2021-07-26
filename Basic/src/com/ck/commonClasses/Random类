@@ -1,0 +1,16 @@
+1）构造方法
+Random():以当前时间毫秒值作为种子，创建Random对象
+Random(long seed):以指定种子创建Random对象
+2）成员方法
+nextInt():生成1个int类型范围的随机数
+nextInt(int n):产生1个[0,n-1]范围内的随机数
+
+生成0~n之间的数
+①(int)Math.random()*(n+1)
+②Random r  = new Random();
+r.nextInt(m)表示生成[0,m-1]之间的随机数，也就是说random.nextInt(m+1)，将生成[0,m]之间的随机整数。
+r.nextInt(n+1)
+生成n~m之间的随机数
+①n+(int)(Math.random()*(m+1-n));
+②Random r = new Random();
+r.nextInt(m+1-n)+n;

@@ -1,0 +1,285 @@
+集合类主要是：
+    list:一种有序列的集合
+    set:一种保证没有重复元素的集合
+    map:一种通过键值对查找的映射表集合
+
+集合中可以存放基本数据类型的包装类对象，也可以存放其他对象，存放基本数据类型的时候报错了；
+
+Hashtable、Vector、Stack属于历史遗留集合类，不应该继续使用
+
+集合类中都有迭代器，遍历的时候，用for(T index : 集合对象){}，这种方式较为高效
+
+一、list ArrayList LinkedList Vector(为了兼容以前的，现在不要用了)
+
+    List<Integer> list = new ArrayList<Integer>(); //把Integer换成int后报错，放两个Integer也不行
+
+    list是一个接口，里面定义了很多抽象方法，ArrayList, LinkedList Vector都间接继承了它
+
+    使用的时候，基本上都是用ArrayList和LinkedList来new出来一个对象，然后用List<>去接收它，他们两个都是线程不安全的
+
+    ArrayList常用方法：
+
+    size()
+    clear()
+    add(Object)
+    add(0, Object)：插入元素到第一个元素
+    get(index)
+    set(index, value)：设置index位置为value值
+
+    LinkedList常用方法：
+
+    add()
+    addFirst()：在集合的第零个位置插入
+    addLast()：在集合的最后一个位置插入
+    getFirst()：获取第1个元素
+    getLast()：获取最后一个元素
+    pollFirst()：删除第一个元素
+    pollLast()：删除最后一个元素
+
+    ArrayList和LinkedList的区别：
+
+    ArrayList查找和修改高效率，删除和新增低效率
+
+    原因：ArrayList查询和修改效率高是因为空间连续，删除和新增效率低是因为涉及元素的移动时间
+
+    LinkedList反之，删除和新增高效率，查找和修改低效率
+
+    原因：LinkedList空间不连续，用的是链表，查找和修改效率低是因为多了个寻址时间
+
+二、Map：
+    参考链接：https://blog.csdn.net/qq_29373285/article/details/81487594
+
+    HashMap<k, v>:存储数据采用的哈希表结构，元素的存取顺序不能保证一致。
+    由于要保证键的唯一、不重复，需要重写键的hashCode()方法、equals()方法。
+
+    LinkedHashMap<k, v>:HashMap下有个子类LinkedHashMap，存储数据采用的哈希表结构+链表结构。
+    通过链表结构可以保证元素的存取顺序一致；通过哈希表结构可以保证的键的唯一、不重复，需要重写键的hashCode()方法、equals()方法。
+
+
+    常用方法：
+    get():查
+    put()：增、改
+    remove()：删
+
+    范例：
+    public class MapDemo {
+        public static void main(String[] args) {
+            //创建Map对象
+            Map<String, String> map = new HashMap<String,String>();       //数据采用的哈希表结构
+            //给map中添加元素
+            map.put("星期一", "Monday");
+            map.put("星期日", "Sunday");
+            System.out.println(map); // {星期日=Sunday, 星期一=Monday}
+
+            //当给Map中添加元素，会返回key对应的原来的value值，若key没有对应的值，返回null
+            System.out.println(map.put("星期一", "Mon")); // Monday
+            System.out.println(map); // {星期日=Sunday, 星期一=Mon}
+
+            //根据指定的key获取对应的value
+            String en = map.get("星期日");
+            System.out.println(en); // Sunday
+
+            //根据key删除元素,会返回key对应的value值
+            String value = map.remove("星期日");
+            System.out.println(value); // Sunday
+            System.out.println(map); // {星期一=Mon}
+        }
+    }
+
+    迭代思路一：
+    keySet():返回所有的键
+
+    // 根据 map.keySet().iterator()迭代
+
+    public class MapDemo {
+        public static void main(String[] args) {
+            //创建Map对象
+            Map<String, String> map = new HashMap<String,String>();
+            //给map中添加元素
+            map.put("邓超", "孙俪");
+            map.put("李晨", "范冰冰");
+    map.put("刘德华", "柳岩");
+            //获取Map中的所有key
+            Set<String> keySet = map.keySet();
+            //遍历存放所有key的Set集合
+            Iterator<String> it =keySet.iterator();    **
+            while(it.hasNext()){                         //利用了Iterator迭代器**
+                //得到每一个key
+                String key = it.next();
+                //通过key获取对应的value
+                String value = map.get(key);
+                System.out.println(key+"="+value);
+            }
+        }
+    }
+
+    keySet遍历方法：
+
+    Iterator<String> iter = map.keySet().iterator();
+
+    while (iter.hasNext()) {
+
+        int key = iter.next();
+
+        String value = map.get(key);
+    }
+
+    ————————————————————————————————————————————
+
+    //还有一种写法 用for each
+    for (String key : map.keySet()) {
+        String value = map.get(key);
+    }
+
+
+    迭代思路二：
+    entrySet():返回键值对的set视图
+
+    public class MapDemo {
+        public static void main(String[] args) {
+            //创建Map对象
+            Map<String, String> map = new HashMap<String,String>();
+            //给map中添加元素
+            map.put("邓超", "孙俪");
+            map.put("李晨", "范冰冰");
+            map.put("刘德华", "柳岩");
+            //获取Map中的所有key与value的对应关系
+            Set<Map.Entry<String,String>> entrySet = map.entrySet();
+            //遍历Set集合
+            Iterator<Map.Entry<String,String>> it =entrySet.iterator();
+            while(it.hasNext()){
+                //得到每一对对应关系
+                Map.Entry<String,String> entry = it.next();
+                //通过每一对对应关系获取对应的key
+                String key = entry.getKey();
+                //通过每一对对应关系获取对应的value
+                String value = entry.getValue();
+                System.out.println(key+"="+value);
+            }
+        }
+    }
+
+    entrySet遍历方法
+    Iterator<Entry<String, String>> iter = map.entrySet().iterator();
+
+    Entry<String, String> entry;
+
+    while (iter.hasNext()) {
+
+        entry = iter.next();
+
+        int key = entry.getKey();
+
+        String value = entry.getValue();
+
+    }
+
+    //同样的for each写法
+    for (Entry<String, String> entry: map.entrySet()) {
+
+        int key = entry.getKey();
+
+        String value = entry.getValue();
+
+    }
+
+    其他Map：
+    EnumMap：
+    因为HashMap是一种通过对key计算hashCode()，通过空间换时间的方式，直接定位到value所在的内部数组的索引，因此，查找效率非常高。
+
+    如果作为key的对象是enum类型，那么，还可以使用Java集合库提供的一种EnumMap，它在内部以一个非常紧凑的数组存储value，
+    并且根据enum类型的key直接定位到内部数组的索引，并不需要计算hashCode()，不但效率最高，而且没有额外的空间浪费。
+
+    public class Main {
+        public static void main(String[] args) {
+            Map<DayOfWeek, String> map = new EnumMap<>(DayOfWeek.class);
+            map.put(DayOfWeek.MONDAY, "星期一");
+            map.put(DayOfWeek.TUESDAY, "星期二");
+            map.put(DayOfWeek.WEDNESDAY, "星期三");
+            map.put(DayOfWeek.THURSDAY, "星期四");
+            map.put(DayOfWeek.FRIDAY, "星期五");
+            map.put(DayOfWeek.SATURDAY, "星期六");
+            map.put(DayOfWeek.SUNDAY, "星期日");
+            System.out.println(map);
+            System.out.println(map.get(DayOfWeek.MONDAY));
+        }
+    }
+
+    TreeMap：有一种Map，它在内部会对Key进行排序，这种Map就是SortedMap。注意到SortedMap是接口，它的实现类是TreeMap。
+
+    public class Main {
+        public static void main(String[] args) {
+            Map<String, Integer> map = new TreeMap<>();
+            map.put("orange", 1);
+            map.put("apple", 2);
+            map.put("pear", 3);
+            for (String key : map.keySet()) {
+                System.out.println(key);
+            }
+            // apple, orange, pear
+        }
+    }
+
+    使用TreeMap时，放入的Key必须实现Comparable接口。String、Integer这些类已经实现了Comparable接口，
+    因此可以直接作为Key使用。作为Value的对象则没有任何要求。
+
+    如果作为Key的class没有实现Comparable接口，那么，必须在创建TreeMap时同时指定一个自定义排序算法：
+    public class Main {
+        public static void main(String[] args) {
+            Map<Person, Integer> map = new TreeMap<>(new Comparator<Person>() {
+                public int compare(Person p1, Person p2) {
+                    return p1.name.compareTo(p2.name);
+                }
+            });
+            map.put(new Person("Tom"), 1);
+            map.put(new Person("Bob"), 2);
+            map.put(new Person("Lily"), 3);
+            for (Person key : map.keySet()) {
+                System.out.println(key);
+            }
+            // {Person: Bob}, {Person: Lily}, {Person: Tom}
+            System.out.println(map.get(new Person("Bob"))); // 2
+        }
+    }
+
+    class Person {
+        public String name;
+        Person(String name) {
+            this.name = name;
+        }
+        public String toString() {
+            return "{Person: " + name + "}";
+        }
+    }
+
+三、Set： 我们经常用Set用于去除重复元素。
+
+    Set用于存储不重复的元素集合，它主要提供以下几个方法：
+    将元素添加进Set<E>：boolean add(E e)
+    将元素从Set<E>删除：boolean remove(Object e)
+    判断是否包含元素：boolean contains(Object e)
+
+    public class Main {
+        public static void main(String[] args) {
+            Set<String> set = new HashSet<>();
+            System.out.println(set.add("abc")); // true
+            System.out.println(set.add("xyz")); // true
+            System.out.println(set.add("xyz")); // false，添加失败，因为元素已存在
+            System.out.println(set.contains("xyz")); // true，元素存在
+            System.out.println(set.contains("XYZ")); // false，元素不存在
+            System.out.println(set.remove("hello")); // false，删除失败，因为元素不存在
+            System.out.println(set.size()); // 2，一共两个元素
+        }
+    }
+
+    Set接口并不保证有序，而SortedSet接口则保证元素是有序的：
+
+    HashSet是无序的，因为它实现了Set接口，并没有实现SortedSet接口；
+    TreeSet是有序的，因为它实现了SortedSet接口。
+
+四、 Queue 队列 先进先出
+    PriorityQueue 会根据元素的排序顺序决定出队的优先级
+    Deque 双端队列
+    Stack 栈 先进后出
+    Iterator 迭代器
+    Collections：可以操作各种集合：给它们排序，让他们反转

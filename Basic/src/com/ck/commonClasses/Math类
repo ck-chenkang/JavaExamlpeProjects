@@ -1,0 +1,9 @@
+成员方法
+abs(int a):绝对值
+ceil(double d):向上取整
+floor(double d):向下取整
+max(int a,int b):最大值
+pow(double a,double b):a的b次幂
+random():随机数[0.0,1.0]
+round(float f):四舍五入
+sqrt(double d):算术平方根
