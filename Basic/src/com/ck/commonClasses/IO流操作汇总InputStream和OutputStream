@@ -1,0 +1,374 @@
+参考链接：https://blog.csdn.net/wangbaochu/article/details/53484042
+IO流操作一般分为两类：字符流和字节流。以“Reader”结尾都是字符流，操作的都是字符型的数据；
+以“Stream”结尾的都是字节流，操作的都是byte数据。现将各种常见IO流总结如下：
+
+一、字节流：
+1. InputStream 和 OutputStream：
+InputStream 和 OutputStream为各种输入输出字节流的基类，所有字节流都继承这两个基类。
+2、FileInputStream 和 FileOutputStream：
+这两个从字面意思很容易理解，是对文件的字节流操作，也会最常见的IO操作流。
+    /*
+     * 以字节为单位读取文件，常用于读二进制文件，如图片、声音、影像等文件。
+     */
+    public static void readFileByBytes(String inFile, String outFile) {
+        File file = new File(fileName);
+        InputStream in = null;
+        OutputStream out = null;
+        try {
+            byte[] tempbytes = new byte[100];
+            int byteread = 0;
+            in = new FileInputStream(inFile);
+            out = new FileOutputStream(outFile);
+            while ((byteread = in.read(tempbytes)) != -1) {
+                out.write(tempbytes, 0, byteread);
+            }
+        } catch (Exception e1) {
+            e1.printStackTrace();
+        } finally {
+            if (in != null) {
+                try {
+                    in.close();
+                } catch (IOException e1) {
+                }
+                try {
+                    out.close();
+                } catch (IOException e1) {
+                }
+            }
+        }
+    }
+
+3、DataInputStream和DataOutputStream
+DataInputStream 是数据输入流，它继承于FilterInputStream。
+DataOutputStream 是数据输出流，它继承于FilterOutputStream。
+二者配合使用，“允许应用程序以与机器无关方式从底层输入流中读写基本 Java 数据类型”。
+    /**
+     * DataOutputStream的API测试函数
+     */
+    private static void testDataOutputStream() {
+        DataOutputStream out = null;
+        try {
+            File file = new File("file.txt");
+            out = new DataOutputStream(new FileOutputStream(file));
+
+            out.writeBoolean(true);
+            out.writeByte((byte)0x41);
+            out.writeChar((char)0x4243);
+            out.writeShort((short)0x4445);
+            out.writeInt(0x12345678);
+            out.writeLong(0x0FEDCBA987654321L);
+            out.writeUTF("abcdefg");
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (SecurityException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                out.close();
+            } catch(IOException e) {
+            }
+        }
+    }
+
+    /**
+     * DataInputStream的API测试函数
+     */
+    private static void testDataInputStream() {
+        DataInputStream in = null;
+        try {
+            File file = new File("file.txt");
+            in = new DataInputStream(new FileInputStream(file));
+
+            System.out.printf("byteToHexString(0x8F):0x%s\n", byteToHexString((byte)0x8F));
+            System.out.printf("charToHexString(0x8FCF):0x%s\n", charToHexString((char)0x8FCF));
+            System.out.printf("readBoolean():%s\n", in.readBoolean());
+            System.out.printf("readByte():0x%s\n", byteToHexString(in.readByte()));
+            System.out.printf("readChar():0x%s\n", charToHexString(in.readChar()));
+            System.out.printf("readShort():0x%s\n", shortToHexString(in.readShort()));
+            System.out.printf("readInt():0x%s\n", Integer.toHexString(in.readInt()));
+            System.out.printf("readLong():0x%s\n", Long.toHexString(in.readLong()));
+            System.out.printf("readUTF():%s\n", in.readUTF());
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (SecurityException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                in.close();
+            } catch(IOException e) {
+            }
+        }
+    }
+
+4.BufferedInputStream 和 BufferedOutputStream
+BufferedInputStream是带缓冲区的输入流，它继承于FilterInputStream。默认缓冲区大小是8M，能够减少访问磁盘的次数，提高文件读取性能。
+
+BufferedOutputStream是带缓冲区的输出流，它继承于FilterOutputStream，能够提高文件的写入效率。
+
+它们提供的“缓冲功能”本质上是通过一个内部缓冲区数组实现的。例如，在新建某输入流对应的BufferedInputStream后，
+当我们通过read()读取输入流的数据时，BufferedInputStream会将该输入流的数据分批的填入到缓冲区中。每当缓冲区中的数据被读完之后，
+输入流会再次填充数据缓冲区；如此反复，直到我们读完输入流数据。
+
+    public static void readAndWrite(String[] args) {
+        try {
+            BufferedInputStream bis = new BufferedInputStream(new FileInputStream("f:/a.mp3"));
+            BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream("f:/b.mp3"));
+            byte[] b=new byte[1024];
+            int len=0;
+            while(-1!= (len = bis.read(b, 0, b.length))) {
+                bos.write(b, 0, len);
+            }
+
+        } catch (FileNotFoundException e) {
+            System.out.println("文件找不到");
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }finally{
+            if (null! = bos){
+                bos.close();
+            }
+            if (null! = bis){
+                bis.close();
+            }
+        }
+    }
+
+二、字符流
+1. InputStreamReader 和 OutputStreamWriter
+ InputStreamReader 和 OutputStreamWriter为各种输入输出字符流的基类，
+ 所有字符流都继承这两个基类。实际上，这两个类内部各自持有一个inputStream 和 outputStream对象，
+ 相当于是对inputStream 和 outputStream进行了包装，将输入字节流转换成字符流，便于读写操作。
+
+
+
+    /**
+     * 以字符为单位读取文件，常用于读文本，数字等类型的文件
+     */
+    public static void readFileByChars(String fileName) {
+        File file = new File(fileName);
+        Reader reader = null;
+        try {
+            System.out.println("以字符为单位读取文件内容，一次读一个字节：");
+            //1. 一次读一个字符
+            reader = new InputStreamReader(new FileInputStream(file));//可以是任意的InputStream类，不一定必须是FileInputStream
+            int tempchar;
+            while ((tempchar = reader.read()) != -1) {
+                if (((char) tempchar) != '\r') {
+                    System.out.print((char) tempchar);
+                }
+            }
+            reader.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        try {
+            System.out.println("以字符为单位读取文件内容，一次读多个字节：");
+            //2. 一次读多个字符
+            char[] tempchars = new char[30];
+            int charread = 0;
+            reader = new InputStreamReader(new FileInputStream(fileName));
+            while ((charread = reader.read(tempchars)) != -1) {
+                for (int i = 0; i < charread; i++) {
+                    if (tempchars[i] != '\r') {
+                        System.out.print(tempchars[i]);
+                    }
+                }
+            }
+
+        } catch (Exception e1) {
+            e1.printStackTrace();
+        } finally {
+            if (reader != null) {
+                try {
+                    reader.close();
+                } catch (IOException e1) {
+                }
+            }
+        }
+    }
+2. FileReader 和 FileWriter
+FileReader 和 FileWriter分别继承自 inputStreamReader 和 outputStreamWriter。
+它是对读取文件操作系统的封装，所有的读写都是直接操作文件系统。
+因此如果是频繁读写操作，不建议使用FileReader 和 FileWriter，
+性能将会非常低，这时你需要使用BufferedReader。
+
+（1）FileWriter类
+构造方法：
+FileWriter fw = new FileWriter(String fileName);//创建字符输出流类对象和已存在的文件相关联。文件不存在的话，并创建。
+FileWriter fw = new FileWriter(String fileName,boolean append);//创建字符输出流类对象和已存在的文件相关联,
+// 并设置该该流对文件的操作是否为续写。
+主要方法：
+
+write(char[] buffer, int offset, int count) //将字符数组写入，offset为数组的起始地址，count为需要写入的字符数
+void write(String str)  //写入字符串。当执行完此方法后，字符数据还并没有写入到目的文件中去。此时字符数据会保存在缓冲区中。
+viod flush() //刷新该流中的缓冲。将缓冲区中的字符数据保存到目的文件中去。
+viod close() //关闭此流。在关闭前会先刷新此流的缓冲区。在关闭后，再写入或者刷新的话，会抛IOException异常。
+
+（2）FileReader类
+构造方法：
+FileReader fr = new FileReader(String fileName);  //使用带有指定文件的String参数的构造方法。创建该输入流对象。并关联源文件。
+主要方法：
+int read();   // 读取单个字符。返回作为整数读取的字符，如果已达到流末尾，则返回 -1。
+int read(char []cbuf);  //将字符读入数组。返回读取的字符数。如果已经到达尾部，则返回-1。
+void close();   //关闭此流对象。释放与之关联的所有资源。
+
+
+
+    public static void readAndWrite() {
+        FileReader fr = null;
+        FileWriter fw = null;
+        try {
+            fr = new FileReader("C:\\my.txt");
+            fw = new FileWriter("D:\\you.txt");
+            //1.读一个字符，写一个字符方法
+            int ch = 0;
+            while ((ch = fr.read()) != -1) {
+                fw.write(ch);
+            }
+
+            //2.读一个数组大小，写一个数组大小方法。
+            char []buf = new char[1024];
+            int len = 0;
+            while((len = fr.read(buf)) != -1){
+                fw.write(buf, 0, len);
+            }
+
+            //3.直接写一个字符串
+            fw.write("hello world!");
+        } catch (Exception e) {
+            System.out.println(e.toString());
+        } finally {
+            if (fr != null)
+                try {
+                    fr.close();
+                } catch (Exception e2) {
+                    throw new RuntimeException("关闭失败！");
+                }
+            if (fw != null){
+                try {
+                    fw.close();
+                } catch (IOException e) {
+                    throw new RuntimeException("关闭失败！");
+                }
+            }
+        }
+    }
+3. BufferedReader 和 BufferedWriter
+（1）BufferedReader和BufferedWriter类各拥有8192字符的缓冲区。
+当BufferedReader在读取文本文件时，会先尽量从文件中读入字符数据并置入缓冲区，而之后若使用read()方法，
+会先从缓冲区中进行读取。如果缓冲区数据不足，才会再从文件中读取，使用BufferedWriter时，写入的数据并不会先输出到目的地，
+而是先存储至缓冲区中。如果缓冲区中的数据满了，才会一次对目的地进行写出。
+（2）从标准输入流System.in中直接读取使用者输入时，使用者每输入一个字符，System.in就读取一个字符。
+为了能一次读取一行使用者的输入，使用了BufferedReader来对使用者输入的字符进行缓冲。
+readLine()方法会在读取到使用者的换行字符时，再一次将整行字符串传入
+
+
+
+    /**
+     * 以行为单位读取文件，常用于读面向行的格式化文件
+     */
+    public static void readWithBufferedReader(String fileName) {
+        File file = new File(fileName);
+        BufferedReader reader = null;
+        try {
+            reader = new BufferedReader(new FileReader(file));
+            String tempString = null;
+            int line = 1;
+            // 一次读入一行，直到读入null为文件结束
+            while ((tempString = reader.readLine()) != null) {
+                System.out.println("line " + line + ": " + tempString);
+                line++;
+            }
+            reader.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (reader != null) {
+                try {
+                    reader.close();
+                } catch (IOException e1) {
+                }
+            }
+        }
+    }
+System.in是一个位流，为了转换为字符流，可使用InputStreamReader为其进行字符转换，然后再使用BufferedReader为其增加缓冲功能。例如：
+
+    public static void readAndWrite() {
+        try {
+            //缓冲System.in输入流
+            //System.in是位流，可以通过InputStreamReader将其转换为字符流
+            BufferedReader bufReader = new BufferedReader(new InputStreamReader(System.in));
+            //缓冲FileWriter
+            BufferedWriter bufWriter = new BufferedWriter(new FileWriter("/sdcard/log/test.txt"));
+
+            String input = null;
+            //每读一行进行一次写入动作
+            while(!(input = bufReader.readLine())) {
+                bufWriter.write(input);
+                //newLine()方法写入与操作系统相依的换行字符，依执行环境当时的OS来决定该输出那种换行字符
+                bufWriter.newLine();
+            }
+            bufReader.close();
+            bufWriter.close();
+        } catch(ArrayIndexOutOfBoundsException e) {
+            System.out.println("没有指定文件");
+        } catch(IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+三、 RandomAccessFile
+RandomAccessFile不属于InputStream和OutputStream类系的。
+实际上，它和这两个类系毫不相干，甚至不使用InputStream和OutputStream类中已经存在的任何功能；
+它是一个完全独立的类。这可能是因为RandomAccessFile能在文件里面前后移动，所以它的行为与其它的I/O类有些根本性的不同。
+RandomAccessFile的基本功能有：定位用的getFilePointer( )，在文件里移动用的seek( )，
+以及判断文件大小的length( )、skipBytes()跳过多少字节数。
+此外，它的构造函数还要一个表示以只读方式("r")，还是以读写方式("rw")打开文件的参数。实际它和C的fopen()一模一样，都是直接对文件句柄操作。
+
+
+
+    /**
+     * 随机读取文件内容
+     */
+    public static void readFileByRandomAccess(String fileName) {
+        RandomAccessFile randomFile = null;
+        try {
+            // 打开一个随机访问文件流，按只读方式
+            randomFile = new RandomAccessFile(fileName, "rw");
+            long fileLength = randomFile.length();
+
+            // 设置读写文件的起始位置
+            randomFile.seek(0);
+
+            // 一次读取多个数据
+            byte[] bytes = new byte[10];
+            int byteread = 0;
+            while ((byteread = randomFile.read(bytes)) != -1) {
+                System.out.write(bytes, 0, byteread);
+            }
+            //一次写入多个数据
+            randomFile.write(bytes);
+
+            // 一次读取单个数据
+            randomFile()
+            // 一次写入单个数据
+            randomFile.writeDouble(47.0001);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (randomFile != null) {
+                try {
+                    randomFile.close();
+                } catch (IOException e1) {
+                }
+            }
+        }
+    }
