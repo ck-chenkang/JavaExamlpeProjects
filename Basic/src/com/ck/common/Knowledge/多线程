@@ -1,0 +1,1000 @@
+参考链接：https://www.cnblogs.com/java1024/archive/2019/11/28/11950129.html
+
+进程:程序运行的一次过程
+线程：是进程更小的划分，包含在进程中
+
+一、线程的实现方式：
+
+1、实现Runnable接口：
+
+class MyThread implements Runnable{ // 实现Runnable接口，作为线程的实现类
+    private String name ;       // 表示线程的名称
+    public MyThread(String name){
+        this.name = name ;      // 通过构造方法配置name属性
+    }
+
+    @Override
+    public void run(){  // 覆写run()方法，作为线程 的操作主体
+        for(int i=0;i<10;i++){
+            System.out.println(name + "运行，i = " + i) ;
+        }
+    }
+};
+public class RunnableDemo01{
+    public static void main(String args[]){
+        MyThread mt1 = new MyThread("线程A ") ;    // 实例化对象
+        MyThread mt2 = new MyThread("线程B ") ;    // 实例化对象
+        Thread t1 = new Thread(mt1) ;       // 实例化Thread类对象
+        Thread t2 = new Thread(mt2) ;       // 实例化Thread类对象
+        t1.start() ;    // 启动多线程，也可以用new Thread(mt1).start()这样的方式启动线程，这是一种静态代理的方式
+        t2.start() ;    // 启动多线程
+    }
+};
+
+2、继承Thread类：
+
+class MyThread extends Thread{  // 继承Thread类，作为线程的实现类
+    private String name ;       // 表示线程的名称
+    public MyThread(String name){
+        this.name = name ;      // 通过构造方法配置name属性
+    }
+
+    @Override
+    public void run(){  // 覆写run()方法，作为线程 的操作主体
+        for(int i=0;i<10;i++){
+            System.out.println(name + "运行，i = " + i) ;
+        }
+    }
+};
+public class ThreadDemo02{
+    public static void main(String args[]){
+        MyThread mt1 = new MyThread("线程A ") ;    // 实例化对象
+        MyThread mt2 = new MyThread("线程B ") ;    // 实例化对象
+        mt1.start() ;   // 调用线程主体
+        mt2.start() ;   // 调用线程主体
+    }
+};
+
+推荐使用继承Runnable接口的方式，实现线程
+
+二、线程状态的变化：
+
+    线程有五种状态：
+
+    1) 创建状态：
+    在程序中用构造方法创建了一个线程对象后，新的线程对象便处于新建状态，
+    此时它已经有了相应的内存空间和其他资源，但还处于不可运行状态。
+    新建一个线程对象可采用Thread 类的构造方法来实现，例如 “Thread thread=new Thread()”。
+
+    2) 就绪状态：
+    新建线程对象后，调用该线程的 start() 方法就可以启动线程。
+    当线程启动时，线程进入就绪状态。
+    此时，线程将进入线程队列排队，等待 CPU 服务，这表明它已经具备了运行条件。
+
+    3）运行状态：
+    当就绪状态被调用并获得处理器资源时，线程就进入了运行状态。
+    此时，自动调用该线程对象的 run() 方法。run() 方法定义该线程的操作和功能。
+
+    4）阻塞状态：
+    一个正在执行的线程在某些特殊情况下，如被人为挂起或需要执行耗时的输入/输出操作，
+    会让 CPU 暂时中止自己的执行，进入阻塞状态。
+    在可执行状态下，如果调用sleep(),suspend(),wait() 等方法，线程都将进入阻塞状态，
+    发生阻塞时线程不能进入排队队列，只有当引起阻塞的原因被消除后，线程才可以转入就绪状态。
+
+    5）死亡状态：
+    线程调用 stop() 方法时或 run() 方法执行结束后，即处于死亡状态。处于死亡状态的线程不具有继续运行的能力。
+    备注：线程不推荐使用stop方法结束，可以使用标志位的方式结束线程。
+
+    问题：Java程序每次运行至少启动几个线程：
+    两个，一个main线程，一个垃圾回收线程
+
+三、取得和设置线程的名字：
+    class MyThread implements Runnable{ //实现Runnable接口
+        @Override
+        public void run(){
+           for(int i=0;i<3;i++){
+               System.Out.Println(Thread.currentThread().getName()+"运行, i="+i);  //取得当前线程的名称
+           }
+      }
+    };
+
+    public class ThreadDemo{
+    public static void main(String args[]){
+        MyThread my=new MyThread();  //定义Runnable子类对象
+        new Thread(my).start;    //系统自动设置线程名称，Thread-0
+        new Thread(my,"线程A").start();  //手工设置线程名称，线程A
+      }
+    };
+
+四、线程的操作方法：
+    1、
+    join()：让一个线程强制运行到结束，其他线程无法运行，必须等它结束。
+
+    class MyThread implements Runnable{ // 实现Runnable接口
+
+        @Override
+        public void run(){  // 覆写run()方法
+            for(int i=0;i<50;i++){
+                System.out.println(Thread.currentThread().getName()
+                        + "运行，i = " + i) ;  // 取得当前线程的名字
+            }
+        }
+    };
+    public class ThreadJoinDemo{
+        public static void main(String args[]){
+            MyThread mt = new MyThread() ;  // 实例化Runnable子类对象
+            Thread t = new Thread(mt,"线程");     // 实例化Thread对象
+            t.start() ; // 启动线程
+            for(int i=0;i<50;i++){
+                if(i>10){
+                    try{
+                        t.join() ;  // 线程强制运行
+                    }catch(InterruptedException e){
+                    }
+                }
+                System.out.println("Main线程运行 --> " + i) ;
+            }
+        }
+    };
+
+    2、
+    sleep() 线程休眠，在线程中，允许一个线程暂时休眠，直接使用Thread.sleep()
+
+    用途：1）模拟网络延时，2）倒计时，3）以秒级打印当前时间
+
+    class MyThread implements Runnable{ // 实现Runnable接口
+        public void run(){  // 覆写run()方法
+            for(int i=0;i<50;i++){
+                try{
+                    Thread.sleep(500) ; // 线程休眠
+                }catch(InterruptedException e){
+                }
+                System.out.println(Thread.currentThread().getName()
+                        + "运行，i = " + i) ;  // 取得当前线程的名字
+            }
+        }
+    };
+    public class ThreadSleepDemo{
+        public static void main(String args[]){
+            MyThread mt = new MyThread() ;  // 实例化Runnable子类对象
+            Thread t = new Thread(mt,"线程");     // 实例化Thread对象
+            t.start() ; // 启动线程
+        }
+    };
+
+    2)模拟倒计时：
+    public class Learning {
+        public static void main(String[] args) {
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    for (int i = 10; i >= 0; i--) {
+                        System.out.println(i);
+                        try {
+                            Thread.sleep(1000);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            }).start();
+        }
+    }
+
+    4)打印当前时间：
+    public class Learning {
+        public static void main(String[] args) {
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    while (true) {
+                        System.out.println(new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(new Date()));
+                        try {
+                            Thread.sleep(1000);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            }).start();
+        }
+    }
+
+    3、
+    中断线程：
+    interrupt()
+    当一个线程运行时，另外一个线程可以直接通过interrupt()方法中断其运行状态。
+
+    class MyThread implements Runnable{ // 实现Runnable接口
+        public void run(){  // 覆写run()方法
+            System.out.println("1、进入run()方法") ;
+            try{
+                Thread.sleep(10000) ;   // 线程休眠10秒
+                System.out.println("2、已经完成了休眠") ;
+            }catch(InterruptedException e){
+                System.out.println("3、休眠被终止") ;
+                return ; // 返回调用处
+            }
+            System.out.println("4、run()方法正常结束") ;
+        }
+    };
+    public class ThreadInterruptDemo{
+        public static void main(String args[]){
+            MyThread mt = new MyThread() ;  // 实例化Runnable子类对象
+            Thread t = new Thread(mt,"线程");     // 实例化Thread对象
+            t.start() ; // 启动线程
+            try{
+                Thread.sleep(2000) ;    // 线程休眠2秒
+            }catch(InterruptedException e){
+                System.out.println("休眠被终止") ;
+            }
+            t.interrupt() ; // 中断线程执行
+        }
+    };
+
+    输出：
+    1、进入run()方法 // MyThread类中的流输出
+    3、休眠被终止 // MyThread类中的流输出
+
+    4、守护线程/后台线程：
+    setDaemon()
+    在 Java 程序中，只要前台有一个线程在运行，则整个 Java 进程都不会消失，
+    所以此时可以设置一个后台线程，这样即使 Java 线程结束了，此后台线程依然会继续执行，
+    要想实现这样的操作，直接使用 setDaemon() 方法即可。
+
+    class MyThread implements Runnable{ // 实现Runnable接口
+        public void run(){  // 覆写run()方法
+            while(true){
+                System.out.println(Thread.currentThread().getName() + "在运行。") ; //这一句话会在后台输出很多次，然后程序就退出了
+            }
+        }
+    };
+    public class ThreadDaemonDemo{
+        public static void main(String args[]){
+            MyThread mt = new MyThread() ;  // 实例化Runnable子类对象
+            Thread t = new Thread(mt,"线程");     // 实例化Thread对象
+            t.setDaemon(true) ; // 此线程在后台运行
+            t.start() ; // 启动线程
+        }
+    };
+
+    在线程类 MyThread 中，尽管 run() 方法中是死循环的方式，但是程序依然可以执行完，因为方法中死循环的线程操作已经设置成后台运行。
+
+    5、线程的优先级：
+    setPriority()
+    在 Java 的线程操作中，所有的线程在运行前都会保持在就绪状态，那么此时，哪个线程的优先级高，哪个线程就有可能会先被执行。
+    线程的优先级，正常情况下是5，最小是1，最大是10
+
+    从程序的运行结果中可以观察到，线程将根据其优先级的大小来决定哪个线程会先运行，
+    但是需要注意并非优先级越高就一定会先执行，哪个线程先执行将由 CPU 的调度决定。
+
+    class MyThread implements Runnable{ // 实现Runnable接口
+        public void run(){  // 覆写run()方法
+            for(int i=0;i<5;i++){
+                try{
+                    Thread.sleep(500) ; // 线程休眠
+                }catch(InterruptedException e){
+                }
+                System.out.println(Thread.currentThread().getName()
+                        + "运行，i = " + i) ;  // 取得当前线程的名字
+            }
+        }
+    };
+    public class ThreadPriorityDemo{
+        public static void main(String args[]){
+            Thread t1 = new Thread(new MyThread(),"线程A") ;  // 实例化线程对象
+            Thread t2 = new Thread(new MyThread(),"线程B") ;  // 实例化线程对象
+            Thread t3 = new Thread(new MyThread(),"线程C") ;  // 实例化线程对象
+            t1.setPriority(Thread.MIN_PRIORITY) ;   // 优先级最低
+            t2.setPriority(Thread.MAX_PRIORITY) ;   // 优先级最高
+            t3.setPriority(Thread.NORM_PRIORITY) ;  // 优先级最中等
+            t1.start() ;    // 启动线程
+            t2.start() ;    // 启动线程
+            t3.start() ;    // 启动线程
+        }
+    };
+
+    6、线程的礼让：
+    yield():
+    在线程操作中，也可以使用 yield() 方法将一个线程的操作暂时让给其他线程执行
+
+    class MyThread implements Runnable{ // 实现Runnable接口
+        public void run(){  // 覆写run()方法
+            for(int i=0;i<5;i++){
+                try{
+                    Thread.sleep(500) ;
+                }catch(Exception e){
+                }
+                System.out.println(Thread.currentThread().getName()
+                        + "运行，i = " + i) ;  // 取得当前线程的名字
+                if(i==2){
+                    System.out.print("线程礼让：") ;
+                    Thread.currentThread().yield() ;    // 线程礼让
+                }
+            }
+        }
+    };
+    public class ThreadYieldDemo{
+        public static void main(String args[]){
+            MyThread my = new MyThread() ;  // 实例化MyThread对象
+            Thread t1 = new Thread(my,"线程A") ;
+            Thread t2 = new Thread(my,"线程B") ;
+            t1.start() ;
+            t2.start() ;
+        }
+    };
+
+五、同步以及死锁：
+
+    一个多线程的程序如果是通过 Runnable 接口实现的，则意味着类中的属性被多个线程共享，
+    那么这样就会造成一种问题。
+    ☆ 如果这多个线程要操作同一个资源时就有可能出现资源同步问题。3
+
+    同步方法（synchronized关键字修饰的方法）可以较好地解决并发问题，在一定程度上可以避免出现资源抢占、竞争条件和死锁的情况，
+    但其副作用是同步锁可导致线程阻塞。这要求同步方法的执行时间不能太长。
+
+    除了synchronized关键字可以实现线程同步外，还有其他很多方法，具体可以参考下面的链接。
+
+    其他参考链接：https://blog.csdn.net/weixin_39214481/article/details/80489586【Java多线程同步的五种方法】
+
+    1、同步代码块：
+    synchronized(同步对象)｛
+     需要同步的代码
+    ｝
+
+    class MyThread implements Runnable{
+        private int ticket = 5 ;    // 假设一共有5张票
+        public void run(){
+            for(int i=0;i<100;i++){
+                synchronized(this){ // 要对当前对象进行同步
+                    if(ticket>0){   // 还有票
+                        try{
+                            Thread.sleep(300) ; // 加入延迟
+                        }catch(InterruptedException e){
+                            e.printStackTrace() ;
+                        }
+                        System.out.println("卖票：ticket = " + ticket-- );
+                    }
+                }
+            }
+        }
+    };
+    public class SyncDemo02{
+        public static void main(String args[]){
+            MyThread mt = new MyThread() ;  // 定义线程对象
+            Thread t1 = new Thread(mt) ;    // 定义Thread对象
+            Thread t2 = new Thread(mt) ;    // 定义Thread对象
+            Thread t3 = new Thread(mt) ;    // 定义Thread对象
+            t1.start() ;
+            t2.start() ;
+            t3.start() ;
+        }
+    };
+
+    2、同步方法：
+    除了可以将需要的代码设置成同步代码块外，也可以使用 synchronized 关键字将一个方法声明为同步方法。
+
+    synchronized 方法返回值 方法名称（参数列表）｛
+
+    ｝
+
+    class MyThread implements Runnable{
+        private int ticket = 5 ;    // 假设一共有5张票
+        public void run(){
+            for(int i=0;i<100;i++){
+                this.sale() ;   // 调用同步方法
+            }
+        }
+        public synchronized void sale(){    // 声明同步方法
+            if(ticket>0){   // 还有票
+                try{
+                    Thread.sleep(300) ; // 加入延迟
+                }catch(InterruptedException e){
+                    e.printStackTrace() ;
+                }
+                System.out.println("卖票：ticket = " + ticket-- );
+            }
+
+        }
+    };
+    public class SyncDemo03{
+        public static void main(String args[]){
+            MyThread mt = new MyThread() ;  // 定义线程对象
+            Thread t1 = new Thread(mt) ;    // 定义Thread对象
+            Thread t2 = new Thread(mt) ;    // 定义Thread对象
+            Thread t3 = new Thread(mt) ;    // 定义Thread对象
+            t1.start() ;
+            t2.start() ;
+            t3.start() ;
+        }
+    };
+
+    3、死锁
+
+    同步可以保证资源共享操作的正确性，但是过多同步也会产生问题。例如，现在张三想要李四的画，李四想要张三的书，
+    张三对李四说“把你的画给我，我就给你书”，李四也对张三说“把你的书给我，我就给你画”两个人互相等对方先行动，
+    就这么干等没有结果，这实际上就是死锁的概念。
+
+    所谓死锁，就是两个线程都在等待对方先完成，造成程序的停滞，一般程序的死锁都是在程序运行时出现的。
+
+    下面以一个简单范例说明这个概念
+
+    class Zhangsan{ // 定义张三类
+        public void say(){
+            System.out.println("张三对李四说：“你给我画，我就把书给你。”") ;
+        }
+        public void get(){
+            System.out.println("张三得到画了。") ;
+        }
+    };
+    class Lisi{ // 定义李四类
+        public void say(){
+            System.out.println("李四对张三说：“你给我书，我就把画给你”") ;
+        }
+        public void get(){
+            System.out.println("李四得到书了。") ;
+        }
+    };
+    public class ThreadDeadLock implements Runnable{
+        private static Zhangsan zs = new Zhangsan() ;       // 实例化static型对象
+        private static Lisi ls = new Lisi() ;       // 实例化static型对象
+        private boolean flag = false ;  // 声明标志位，判断那个先说话
+        public void run(){  // 覆写run()方法
+            if(flag){
+                synchronized(zs){   // 同步张三
+                    zs.say() ;
+                    try{
+                        Thread.sleep(500) ;
+                    }catch(InterruptedException e){
+                        e.printStackTrace() ;
+                    }
+                    synchronized(ls){
+                        zs.get() ;
+                    }
+                }
+            }else{
+                synchronized(ls){
+                    ls.say() ;
+                    try{
+                        Thread.sleep(500) ;
+                    }catch(InterruptedException e){
+                        e.printStackTrace() ;
+                    }
+                    synchronized(zs){
+                        ls.get() ;
+                    }
+                }
+            }
+        }
+        public static void main(String args[]){
+            ThreadDeadLock t1 = new ThreadDeadLock() ;      // 控制张三
+            ThreadDeadLock t2 = new ThreadDeadLock() ;      // 控制李四
+            t1.flag = true ;
+            t2.flag = false ;
+            Thread thA = new Thread(t1) ;
+            Thread thB = new Thread(t2) ;
+            thA.start() ;
+            thB.start() ;
+        }
+    };
+
+六、生产者消费者问题：
+    参考链接：https://blog.csdn.net/ldx19980108/article/details/81707751
+
+    1、问题描述：
+    生产者消费者问题（Producer-consumer problem），也称有限缓冲问题（Bounded-buffer problem），
+    是一个多线程同步问题的经典案例。生产者生成一定量的数据放到缓冲区中，然后重复此过程；
+    与此同时，消费者也在缓冲区消耗这些数据。生产者和消费者之间必须保持同步，要保证生产者不会在缓冲区满时放入数据，
+    消费者也不会在缓冲区空时消耗数据。不够完善的解决方法容易出现死锁的情况，此时进程都在等待唤醒。
+
+    2、解决方法：
+    思路：
+    1）采用某种机制保护生产者和消费者之间的同步。有较高的效率，并且易于实现，代码的可控制性较好，属于常用的模式。
+    2）在生产者和消费者之间建立一个管道。管道缓冲区不易控制，被传输数据对象不易于封装等，实用性不强。
+
+    解决问题的核心：
+    保证同一资源被多个线程并发访问时的完整性。常用的同步方法是采用信号或加锁机制，保证资源在任意时刻至多被一个线程访问。
+
+    Java能实现的几种方法
+    1）wait() / notify()方法
+
+    2）await() / signal()方法
+
+    3）BlockingQueue阻塞队列方法
+
+    4）信号量
+
+    5）管道
+
+    3、代码实现：
+    1）wait() / notify()方法：
+
+    当缓冲区已满时，生产者线程停止执行，放弃锁，使自己处于等状态，让其他线程执行；
+    当缓冲区已空时，消费者线程停止执行，放弃锁，使自己处于等状态，让其他线程执行。
+
+    当生产者向缓冲区放入一个产品时，向其他等待的线程发出可执行的通知，同时放弃锁，使自己处于等待状态；
+    当消费者从缓冲区取出一个产品时，向其他等待的线程发出可执行的通知，同时放弃锁，使自己处于等待状态。
+
+    仓库Storage.java：
+
+    import java.util.LinkedList;
+
+    public class Storage {
+
+        // 仓库容量
+        private final int MAX_SIZE = 10;
+        // 仓库存储的载体
+        private LinkedList<Object> list = new LinkedList<>();
+
+        public void produce() {
+            synchronized (list) {
+                while (list.size() + 1 > MAX_SIZE) {
+                    System.out.println("【生产者" + Thread.currentThread().getName()
+    		                + "】仓库已满");
+                    try {
+                        list.wait();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+                list.add(new Object());
+                System.out.println("【生产者" + Thread.currentThread().getName()
+                        + "】生产一个产品，现库存" + list.size());
+                list.notifyAll();
+            }
+        }
+
+        public void consume() {
+            synchronized (list) {
+                while (list.size() == 0) {
+                    System.out.println("【消费者" + Thread.currentThread().getName()
+    						+ "】仓库为空");
+                    try {
+                        list.wait();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+                list.remove();
+                System.out.println("【消费者" + Thread.currentThread().getName()
+                        + "】消费一个产品，现库存" + list.size());
+                list.notifyAll();
+            }
+        }
+    }
+
+    生产者：
+    public class Producer implements Runnable{
+        private Storage storage;
+
+        public Producer(){}
+
+        public Producer(Storage storage){
+            this.storage = storage;
+        }
+
+        @Override
+        public void run(){
+            while(true){
+                try{
+                    Thread.sleep(1000);
+                    storage.produce();
+                }catch (InterruptedException e){
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    消费者：
+    public class Consumer implements Runnable{
+        private Storage storage;
+
+        public Consumer(){}
+
+        public Consumer(Storage storage){
+            this.storage = storage;
+        }
+
+        @Override
+        public void run(){
+            while(true){
+                try{
+                    Thread.sleep(3000);
+                    storage.consume();
+                }catch (InterruptedException e){
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    主函数：
+    public class Main {
+
+        public static void main(String[] args) {
+            Storage storage = new Storage();
+            Thread p1 = new Thread(new Producer(storage));
+            Thread p2 = new Thread(new Producer(storage));
+            Thread p3 = new Thread(new Producer(storage));
+
+            Thread c1 = new Thread(new Consumer(storage));
+            Thread c2 = new Thread(new Consumer(storage));
+            Thread c3 = new Thread(new Consumer(storage));
+
+            p1.start();
+            p2.start();
+            p3.start();
+            c1.start();
+            c2.start();
+            c3.start();
+        }
+    }
+
+    运行结果：
+    【生产者p1】生产一个产品，现库存1
+    【生产者p2】生产一个产品，现库存2
+    【生产者p3】生产一个产品，现库存3
+    【生产者p1】生产一个产品，现库存4
+    【生产者p2】生产一个产品，现库存5
+    【生产者p3】生产一个产品，现库存6
+    【生产者p1】生产一个产品，现库存7
+    【生产者p2】生产一个产品，现库存8
+    【消费者c1】消费一个产品，现库存7
+    【生产者p3】生产一个产品，现库存8
+    【消费者c2】消费一个产品，现库存7
+    【消费者c3】消费一个产品，现库存6
+    【生产者p1】生产一个产品，现库存7
+    【生产者p2】生产一个产品，现库存8
+    【生产者p3】生产一个产品，现库存9
+    【生产者p1】生产一个产品，现库存10
+    【生产者p2】仓库已满
+    【生产者p3】仓库已满
+    【生产者p1】仓库已满
+    【消费者c1】消费一个产品，现库存9
+    【生产者p1】生产一个产品，现库存10
+    【生产者p3】仓库已满
+    。。。。。。以下省略
+
+    一个生产者线程运行produce方法，睡眠1s；一个消费者运行一次consume方法，睡眠3s。
+    此次实验过程中，有3个生产者和3个消费者，也就是我们说的多对多的情况。
+    仓库的容量为10，可以看出消费的速度明显慢于生产的速度，符合设定。
+
+    注意：
+    notifyAll()方法可使所有正在等待队列中等待同一共享资源的“全部”线程从等待状态退出，进入可运行状态。
+    此时，优先级最高的哪个线程最先执行，但也有可能是随机执行的，这要取决于JVM虚拟机的实现。
+    即最终也只有一个线程能被运行，上述线程优先级都相同，每次运行的线程都不确定是哪个，后来给线程设置优先级后也跟预期不一样，还是要看JVM的具体实现吧。
+
+    2）await() / signal()方法：
+    在JDK5中，用ReentrantLock和Condition可以实现等待/通知模型，具有更大的灵活性。
+    通过在Lock对象上调用newCondition()方法，将条件变量和一个锁对象进行绑定，进而控制并发程序访问竞争资源的安全。
+
+    在这里只需改动Storage类
+    import java.util.LinkedList;
+    import java.util.concurrent.locks.Condition;
+    import java.util.concurrent.locks.Lock;
+    import java.util.concurrent.locks.ReentrantLock;
+
+    public class Storage {
+
+        // 仓库最大存储量
+        private final int MAX_SIZE = 10;
+        // 仓库存储的载体
+        private LinkedList<Object> list = new LinkedList<Object>();
+        // 锁
+        private final Lock lock = new ReentrantLock();
+        // 仓库满的条件变量
+        private final Condition full = lock.newCondition();
+        // 仓库空的条件变量
+        private final Condition empty = lock.newCondition();
+
+        public void produce()
+        {
+            // 获得锁
+            lock.lock();
+            while (list.size() + 1 > MAX_SIZE) {
+                System.out.println("【生产者" + Thread.currentThread().getName()
+    		             + "】仓库已满");
+                try {
+                    full.await();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+            list.add(new Object());
+            System.out.println("【生产者" + Thread.currentThread().getName()
+    				 + "】生产一个产品，现库存" + list.size());
+
+            empty.signalAll();
+            lock.unlock();
+        }
+
+        public void consume()
+        {
+            // 获得锁
+            lock.lock();
+            while (list.size() == 0) {
+                System.out.println("【消费者" + Thread.currentThread().getName()
+    		             + "】仓库为空");
+                try {
+                    empty.await();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+            list.remove();
+            System.out.println("【消费者" + Thread.currentThread().getName()
+    		         + "】消费一个产品，现库存" + list.size());
+
+            full.signalAll();
+            lock.unlock();
+        }
+    }
+
+    3）BlockingQueue阻塞队列方法：
+    BlockingQueue是JDK5.0的新增内容，它是一个已经在内部实现了同步的队列，
+    实现方式采用的是我们第2种await() / signal()方法。它可以在生成对象时指定容量大小，用于阻塞操作的是put()和take()方法。
+
+    put()方法：类似于我们上面的生产者线程，容量达到最大时，自动阻塞。
+    take()方法：类似于我们上面的消费者线程，容量为0时，自动阻塞。
+
+    import java.util.concurrent.LinkedBlockingQueue;
+
+    public class Storage {
+
+        // 仓库存储的载体
+        private LinkedBlockingQueue<Object> list = new LinkedBlockingQueue<>(10);
+
+        public void produce() {
+            try{
+                list.put(new Object());
+                System.out.println("【生产者" + Thread.currentThread().getName()
+                        + "】生产一个产品，现库存" + list.size());
+            } catch (InterruptedException e){
+                e.printStackTrace();
+            }
+        }
+
+        public void consume() {
+            try{
+                list.take();
+                System.out.println("【消费者" + Thread.currentThread().getName()
+                        + "】消费了一个产品，现库存" + list.size());
+            } catch (InterruptedException e){
+                e.printStackTrace();
+            }
+        }
+    }
+
+    可能会出现put()或take()和System.out.println()输出不匹配的情况，是由于它们之间没有同步造成的。
+    BlockingQueue可以放心使用，这可不是它的问题，只是在它和别的对象之间的同步有问题。
+
+    4）信号量:
+    Semaphore是一种基于计数的信号量。它可以设定一个阈值，基于此，多个线程竞争获取许可信号，
+    做完自己的申请后归还，超过阈值后，线程申请许可信号将会被阻塞。
+    Semaphore可以用来构建一些对象池，资源池之类的，比如数据库连接池，我们也可以创建计数为1的Semaphore，
+    将其作为一种类似互斥锁的机制，这也叫二元信号量，表示两种互斥状态。
+    计数为0的Semaphore是可以release的，然后就可以acquire（即一开始使线程阻塞从而完成其他执行。）。
+
+    import java.util.LinkedList;
+    import java.util.concurrent.Semaphore;
+
+    public class Storage {
+
+        // 仓库存储的载体
+        private LinkedList<Object> list = new LinkedList<Object>();
+    	// 仓库的最大容量
+        final Semaphore notFull = new Semaphore(10);
+        // 将线程挂起，等待其他来触发
+        final Semaphore notEmpty = new Semaphore(0);
+        // 互斥锁
+        final Semaphore mutex = new Semaphore(1);
+
+        public void produce()
+        {
+            try {
+                notFull.acquire();
+                mutex.acquire();
+                list.add(new Object());
+                System.out.println("【生产者" + Thread.currentThread().getName()
+                        + "】生产一个产品，现库存" + list.size());
+            }
+            catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                mutex.release();
+                notEmpty.release();
+            }
+        }
+
+        public void consume()
+        {
+            try {
+                notEmpty.acquire();
+                mutex.acquire();
+                list.remove();
+                System.out.println("【消费者" + Thread.currentThread().getName()
+                        + "】消费一个产品，现库存" + list.size());
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                mutex.release();
+                notFull.release();
+            }
+        }
+    }
+
+    5）管道：
+    一种特殊的流，用于不同线程间直接传送数据，一个线程发送数据到输出管道，另一个线程从输入管道中读数据。
+
+    inputStream.connect(outputStream)或outputStream.connect(inputStream)
+    作用是使两个Stream之间产生通信链接，这样才可以将数据进行输出与输入。
+
+    这种方式只适用于两个线程之间通信，不适合多个线程之间通信。
+
+    5）
+        1）PipedInputStream / PipedOutputStream （操作字节流）：
+
+        生产者：
+        import java.io.IOException;
+        import java.io.PipedOutputStream;
+
+        public class Producer implements Runnable {
+
+            private PipedOutputStream pipedOutputStream;
+
+            public Producer() {
+                pipedOutputStream = new PipedOutputStream();
+            }
+
+            public PipedOutputStream getPipedOutputStream() {
+                return pipedOutputStream;
+            }
+
+            @Override
+            public void run() {
+                try {
+                    for (int i = 1; i <= 5; i++) {
+                        pipedOutputStream.write(("This is a test, Id=" + i + "!\n").getBytes());
+                    }
+                    pipedOutputStream.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        消费者：
+        import java.io.IOException;
+        import java.io.PipedInputStream;
+
+        public class Consumer implements Runnable {
+            private PipedInputStream pipedInputStream;
+
+            public Consumer() {
+                pipedInputStream = new PipedInputStream();
+            }
+
+            public PipedInputStream getPipedInputStream() {
+                return pipedInputStream;
+            }
+
+            @Override
+            public void run() {
+                int len = -1;
+                byte[] buffer = new byte[1024];
+                try {
+                    while ((len = pipedInputStream.read(buffer)) != -1) {
+                        System.out.println(new String(buffer, 0, len));
+                    }
+                    pipedInputStream.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        主函数：
+        import java.io.IOException;
+
+        public class Main {
+
+            public static void main(String[] args) {
+                Producer p = new Producer();
+                Consumer c = new Consumer();
+                Thread t1 = new Thread(p);
+                Thread t2 = new Thread(c);
+                try {
+                    p.getPipedOutputStream().connect(c.getPipedInputStream());
+                    t2.start();
+                    t1.start();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+  5）
+      2）PipedReader / PipedWriter （操作字符流）：
+
+      生产者：
+        import java.io.IOException;
+        import java.io.PipedWriter;
+
+        public class Producer implements Runnable {
+
+            private PipedWriter pipedWriter;
+
+            public Producer() {
+                pipedWriter = new PipedWriter();
+            }
+
+            public PipedWriter getPipedWriter() {
+                return pipedWriter;
+            }
+
+            @Override
+            public void run() {
+                try {
+                    for (int i = 1; i <= 5; i++) {
+                        pipedWriter.write("This is a test, Id=" + i + "!\n");
+                    }
+                    pipedWriter.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+      消费者：
+        import java.io.IOException;
+        import java.io.PipedReader;
+
+        public class Consumer implements Runnable {
+            private PipedReader pipedReader;
+
+            public Consumer() {
+                pipedReader = new PipedReader();
+            }
+
+            public PipedReader getPipedReader() {
+                return pipedReader;
+            }
+
+            @Override
+            public void run() {
+                int len = -1;
+                char[] buffer = new char[1024];
+                try {
+                    while ((len = pipedReader.read(buffer)) != -1) {
+                        System.out.println(new String(buffer, 0, len));
+                    }
+                    pipedReader.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+      主函数：
+        import java.io.IOException;
+
+        public class Main {
+
+            public static void main(String[] args) {
+                Producer p = new Producer();
+                Consumer c = new Consumer();
+                Thread t1 = new Thread(p);
+                Thread t2 = new Thread(c);
+                try {
+                    p.getPipedWriter().connect(c.getPipedReader());
+                    t2.start();
+                    t1.start();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+七、线程池：
+
+
