@@ -9,9 +9,7 @@ import java.util.List;
 
 /**
  * 教程链接：https://www.liaoxuefeng.com/wiki/1252599548343744
- * Java IO
  * 线程池
- * 线程同步
  * 别人的jar包，怎么用，创建lib目录，add as library
  * 静态代理，动态代理
  * lambda表达式
@@ -20,10 +18,13 @@ import java.util.List;
  * 加密与安全
  * maven基础
  * json与xml
- * jdbcb变成
+ * JDBC编程
+ * 注解
  * 单元测试
  * 设计模式
  * 注解
+ * 反射，去读注解
+ * Java IO
  * date时间、日期
  */
 public class Learning {
