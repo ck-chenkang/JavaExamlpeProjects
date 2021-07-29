@@ -10,10 +10,10 @@ import java.util.List;
 /**
  * 教程链接：https://www.liaoxuefeng.com/wiki/1252599548343744
  * 线程池
- * 别人的jar包，怎么用，创建lib目录，add as library
  * 静态代理，动态代理
  * lambda表达式
  * 静态内部类 局部内部类 匿名内部类，还有一个？
+ * 静态代码块
  * 范型
  * 加密与安全
  * maven基础
@@ -26,22 +26,17 @@ import java.util.List;
  * 反射，去读注解
  * Java IO
  * date时间、日期
+ * 类加载器，类初始化
  */
 public class Learning {
+
+    static {
+        System.out.println("执行了一次");
+    }
     public static void main(String[] args) {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                while (true) {
-                    System.out.println(new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(new Date()));
-                    try {
-                        Thread.sleep(1000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-        }).start();
+        Learning learning = new Learning();
+        Learning learning1 = new Learning();
+        Learning learning2 = new Learning();
     }
 }
 
