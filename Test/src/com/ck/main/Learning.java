@@ -26,7 +26,7 @@ import java.util.List;
  * 反射，去读注解
  * Java IO
  * date时间、日期
- * 类加载器，类初始化
+ * 类加载器，类初始化，类装载顺序
  */
 public class Learning {
 
