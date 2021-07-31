@@ -1,4 +1,467 @@
 参考链接：https://www.cnblogs.com/cC-Zhou/p/9525638.html
     https://www.zhihu.com/question/20794107
-一、代理：
-    代理
+一、代理模式：
+    代理模式（Proxy）是通过代理对象访问目标对象，这样可以在目标对象基础上增加额外的功能，如添加权限，访问控制和审计等功能。
+
+二、静态代理：
+    静态代理模式在不改变目标对象的前提下，实现了对目标对象的功能扩展。
+    不足：静态代理实现了目标对象的所有方法，一旦目标接口增加方法，代理对象和目标对象都要进行相应的修改，增加维护成本。
+
+    范例1：
+        我们平常去电影院看电影的时候，在电影开始的阶段是不是经常会放广告呢？
+
+        电影是电影公司委托给影院进行播放的，但是影院可以在播放电影的时候，产生一些自己的经济收益，比如卖爆米花、可乐等，然后在影片开始结束时播放一些广告。
+
+        现在用代码来进行模拟。
+
+        1）接口
+
+        首先得有一个接口，通用的接口是代理模式实现的基础。这个接口我们命名为 Movie，代表电影播放的能力。
+
+        package com.frank.test;
+
+        public interface Movie {
+            void play();
+        }
+
+        2）接口实现类
+
+        然后，我们要有一个真正的实现这个 Movie 接口的类，和一个只是实现接口的代理类。
+
+        这个表示真正的影片。它实现了 Movie 接口，play() 方法调用时，影片就开始播放。那么 Proxy 代理呢？
+
+        package com.frank.test;
+
+        public class RealMovie implements Movie {
+
+            @Override
+            public void play() {
+                // TODO Auto-generated method stub
+                System.out.println("您正在观看电影 《肖申克的救赎》");
+            }
+
+        }
+
+        3）代理
+
+          代理需要实现接口
+
+          package com.frank.test;
+
+          public class Cinema implements Movie {
+
+              RealMovie movie;
+
+              public Cinema(RealMovie movie) {
+                  super();
+                  this.movie = movie;
+              }
+
+
+              @Override
+              public void play() {
+
+                  guanggao(true);
+
+                  movie.play();
+
+                  guanggao(false);
+              }
+
+              public void guanggao(boolean isStart){
+                  if ( isStart ) {
+                      System.out.println("电影马上开始了，爆米花、可乐、口香糖9.8折，快来买啊！");
+                  } else {
+                      System.out.println("电影马上结束了，爆米花、可乐、口香糖9.8折，买回家吃吧！");
+                  }
+              }
+
+          }
+
+          4）测试代码
+
+          Cinema 就是 Proxy 代理对象，它有一个 play() 方法。不过调用 play() 方法时，它进行了一些相关利益的处理，那就是广告。现在，我们编写测试代码。
+
+          package com.frank.test;
+
+          public class ProxyTest {
+
+              public static void main(String[] args) {
+
+                  RealMovie realmovie = new RealMovie();
+
+                  Movie movie = new Cinema(realmovie);
+
+                  movie.play();
+
+              }
+
+          }
+
+          5）结果：
+
+          电影马上开始了，爆米花、可乐、口香糖9.8折，快来买啊！
+          您正在观看电影 《肖申克的救赎》
+          电影马上结束了，爆米花、可乐、口香糖9.8折，买回家吃吧！
+
+          总结：
+
+          现在可以看到，代理模式可以在不修改被代理对象的基础上，通过扩展代理类，进行一些功能的附加与增强。值得注意的是，代理类和被代理类应该共同实现一个接口，或者是共同继承某个类。
+
+          上面介绍的是静态代理的内容，为什么叫做静态呢？因为它的类型是事先预定好的，比如上面代码中的 Cinema 这个类。下面要介绍的内容就是动态代理。
+
+    范例2：
+
+        1）接口类AdminService.java接口
+        package com.lance.proxy.demo.service;
+
+        public interface AdminService {
+            void update();
+            Object find();
+        }
+
+        2）实现类AdminServiceImpl.java
+
+        package com.lance.proxy.demo.service;
+
+        public class AdminServiceImpl implements AdminService{
+            public void update() {
+                System.out.println("修改管理系统数据");
+            }
+
+            public Object find() {
+                System.out.println("查看管理系统数据");
+                return new Object();
+            }
+        }
+
+        3）代理类AdminServiceProxy.java
+
+        package com.lance.proxy.demo.service;
+
+        public class AdminServiceProxy implements AdminService {
+
+            private AdminService adminService;
+
+            public AdminServiceProxy(AdminService adminService) {
+                this.adminService = adminService;
+            }
+
+            public void update() {
+                System.out.println("判断用户是否有权限进行update操作");
+                adminService.update();
+                System.out.println("记录用户执行update操作的用户信息、更改内容和时间等");
+            }
+
+            public Object find() {
+                System.out.println("判断用户是否有权限进行find操作");
+                System.out.println("记录用户执行find操作的用户信息、查看内容和时间等");
+                return adminService.find();
+            }
+        }
+
+        4）测试类StaticProxyTest.java
+
+        package com.lance.proxy.demo.service;
+
+        public class StaticProxyTest {
+
+            public static void main(String[] args) {
+                AdminService adminService = new AdminServiceImpl();
+                AdminServiceProxy proxy = new AdminServiceProxy(adminService);
+                proxy.update();
+                System.out.println("=============================");
+                proxy.find();
+            }
+        }
+
+        5）测试结果：
+
+        判断用户是否有权限进行update操作
+        修改管理系统数据
+        记录用户执行update操作的用户信息、更改内容和时间等
+        =============================
+        判断用户是否有权限进行find操作
+        记录用户执行find操作的用户信息、查看内容和时间等
+        查看管理系统数据
+
+二、动态代理：
+
+      为解决静态代理对象必须实现接口的所有方法的问题，Java给出了动态代理，动态代理具有如下特点：
+      1.Proxy对象不需要implements接口；
+      2.Proxy对象的生成利用JDK的Api，在JVM内存中动态的构建Proxy对象。需要使用java.lang.reflect.Proxy类的
+
+      上一节代码中 Cinema 类是代理，我们需要手动编写代码让 Cinema 实现 Movie 接口，而在动态代理中，
+      我们可以让程序在运行的时候自动在内存中创建一个实现 Movie 接口的代理，而不需要去定义 Cinema 这个类。这就是它被称为动态的原因。
+
+      范例1：
+      假设有一个大商场，商场有很多的柜台，有一个柜台卖茅台酒。我们进行代码的模拟。
+
+          1）代理对象要实现的接口
+            package com.frank.test;
+
+            public interface SellWine {
+
+                 void maiJiu();
+
+            }
+
+          2）代理对象
+             package com.frank.test;
+
+             public class MaotaiJiu implements SellWine {
+
+                 @Override
+                 public void maiJiu() {
+                     // TODO Auto-generated method stub
+                     System.out.println("我卖得是茅台酒。");
+
+                 }
+
+             }
+
+          3）不需要实现代理对象接口的类
+
+              package com.frank.test;
+              import java.lang.reflect.InvocationHandler;
+              import java.lang.reflect.Method;
+
+              public class GuitaiA implements InvocationHandler {
+
+                  private Object pingpai;
+
+
+                  public GuitaiA(Object pingpai) {
+                      this.pingpai = pingpai;
+                  }
+
+
+
+                  @Override
+                  public Object invoke(Object proxy, Method method, Object[] args)
+                          throws Throwable {
+                      // TODO Auto-generated method stub
+                      System.out.println("销售开始  柜台是： "+this.getClass().getSimpleName());
+                      method.invoke(pingpai, args);
+                      System.out.println("销售结束");
+                      return null;
+                  }
+
+              }
+
+          4）测试代码：
+
+             package com.frank.test;
+             import java.lang.reflect.InvocationHandler;
+             import java.lang.reflect.Proxy;
+
+
+             public class Test {
+
+                 public static void main(String[] args) {
+                     // TODO Auto-generated method stub
+
+                     MaotaiJiu maotaijiu = new MaotaiJiu(); //代理对象
+
+
+                     InvocationHandler jingxiao1 = new GuitaiA(maotaijiu);
+
+
+                     SellWine dynamicProxy = (SellWine) Proxy.newProxyInstance(MaotaiJiu.class.getClassLoader(),
+                             MaotaiJiu.class.getInterfaces(), jingxiao1);
+
+                     dynamicProxy.maiJiu();
+
+                 }
+
+             }
+
+          5）
+
+          输出：
+          销售开始  柜台是： GuitaiA
+          我卖得是茅台酒。
+          销售结束
+
+      范例2：
+
+
+        1）接口类AdminService.java接口
+        package com.lance.proxy.demo.service;
+
+        public interface AdminService {
+            void update();
+            Object find();
+        }
+
+        2）实现类AdminServiceImpl.java
+
+        package com.lance.proxy.demo.service;
+
+        public class AdminServiceImpl implements AdminService{
+            public void update() {
+                System.out.println("修改管理系统数据");
+            }
+
+            public Object find() {
+                System.out.println("查看管理系统数据");
+                return new Object();
+            }
+        }
+
+        3）
+          package com.lance.proxy.demo.service;
+
+          import java.lang.reflect.InvocationHandler;
+          import java.lang.reflect.Method;
+
+          public class AdminServiceInvocation  implements InvocationHandler {
+
+              private Object target;
+
+              public AdminServiceInvocation(Object target) {
+                  this.target = target;
+              }
+
+              public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+                  System.out.println("判断用户是否有权限进行操作");
+                 Object obj = method.invoke(target);
+                  System.out.println("记录用户执行操作的用户信息、更改内容和时间等");
+                  return obj;
+              }
+          }
+
+        4）
+            package com.lance.proxy.demo.service;
+
+            import java.lang.reflect.InvocationHandler;
+            import java.lang.reflect.Proxy;
+
+            public class AdminServiceDynamicProxy {
+                private Object target;
+                private InvocationHandler invocationHandler;
+                public AdminServiceDynamicProxy(Object target,InvocationHandler invocationHandler){
+                    this.target = target;
+                    this.invocationHandler = invocationHandler;
+                }
+
+                public Object getPersonProxy() {
+                    Object obj = Proxy.newProxyInstance(target.getClass().getClassLoader(), target.getClass().getInterfaces(), invocationHandler);
+                    return obj;
+                }
+            }
+
+            方法，方法参数说明：
+            a.ClassLoader loader：指定当前target对象使用类加载器，获取加载器的方法是固定的；
+            b.Class<?>[] interfaces：target对象实现的接口的类型，使用泛型方式确认类型
+            c.InvocationHandler invocationHandler:事件处理,执行target对象的方法时，会触发事件处理器的方法，会把当前执行target对象的方法作为参数传入。
+
+        5）
+            package com.lance.proxy.demo.service;
+
+            import java.lang.reflect.InvocationHandler;
+            import java.lang.reflect.Method;
+            import java.lang.reflect.Proxy;
+
+            public class DynamicProxyTest {
+                public static void main(String[] args) {
+
+                    // 方法一
+                    System.out.println("============ 方法一 ==============");
+                    AdminService adminService = new AdminServiceImpl();
+                    System.out.println("代理的目标对象：" + adminService.getClass());
+
+                    AdminServiceInvocation adminServiceInvocation = new AdminServiceInvocation(adminService);
+
+                    AdminService proxy = (AdminService) new AdminServiceDynamicProxy(adminService, adminServiceInvocation).getPersonProxy();
+
+                    System.out.println("代理对象：" + proxy.getClass());
+
+                    Object obj = proxy.find();
+                    System.out.println("find 返回对象：" + obj.getClass());
+                    System.out.println("----------------------------------");
+                    proxy.update();
+
+                    //方法二
+                    System.out.println("============ 方法二 ==============");
+                    AdminService target = new AdminServiceImpl();
+                    AdminServiceInvocation invocation = new AdminServiceInvocation(adminService);
+                    AdminService proxy2 = (AdminService) Proxy.newProxyInstance(target.getClass().getClassLoader(), target.getClass().getInterfaces(), invocation);
+
+                    Object obj2 = proxy2.find();
+                    System.out.println("find 返回对象：" + obj2.getClass());
+                    System.out.println("----------------------------------");
+                    proxy2.update();
+
+                    //方法三
+                    System.out.println("============ 方法三 ==============");
+                    final AdminService target3 = new AdminServiceImpl();
+                    AdminService proxy3 = (AdminService) Proxy.newProxyInstance(target3.getClass().getClassLoader(), target3.getClass().getInterfaces(), new InvocationHandler() {
+
+                        public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+                            System.out.println("判断用户是否有权限进行操作");
+                            Object obj = method.invoke(target3, args);
+                            System.out.println("记录用户执行操作的用户信息、更改内容和时间等");
+                            return obj;
+                        }
+                    });
+
+                    Object obj3 = proxy3.find();
+                    System.out.println("find 返回对象：" + obj3.getClass());
+                    System.out.println("----------------------------------");
+                    proxy3.update();
+
+
+                }
+            }
+
+        6）输出结果：
+            ============ 方法一 ==============
+            代理的目标对象：class com.lance.proxy.demo.service.AdminServiceImpl
+            代理对象：class com.sun.proxy.$Proxy0
+            判断用户是否有权限进行操作
+            查看管理系统数据
+            记录用户执行操作的用户信息、更改内容和时间等
+            find 返回对象：class java.lang.Object
+            ----------------------------------
+            判断用户是否有权限进行操作
+            修改管理系统数据
+            记录用户执行操作的用户信息、更改内容和时间等
+            ============ 方法二 ==============
+            判断用户是否有权限进行操作
+            查看管理系统数据
+            记录用户执行操作的用户信息、更改内容和时间等
+            find 返回对象：class java.lang.Object
+            ----------------------------------
+            判断用户是否有权限进行操作
+            修改管理系统数据
+            记录用户执行操作的用户信息、更改内容和时间等
+            ============ 方法三 ==============
+            判断用户是否有权限进行操作
+            查看管理系统数据
+            记录用户执行操作的用户信息、更改内容和时间等
+            find 返回对象：class java.lang.Object
+            ----------------------------------
+            判断用户是否有权限进行操作
+            修改管理系统数据
+            记录用户执行操作的用户信息、更改内容和时间等
+
+三、动态代理语法：
+
+     动态代码涉及了一个非常重要的类 Proxy。正是通过 Proxy 的静态方法 newProxyInstance 才会动态创建代理。
+
+     public static Object newProxyInstance(ClassLoader loader,
+                                               Class<?>[] interfaces,
+                                               InvocationHandler h)
+
+     它的 3 个参数意义：
+
+     loader 自然是类加载器
+     interfaces 代码要用来代理的接口
+     h 一个 InvocationHandler 对象
+
+    InvocationHandler 内部只是一个 invoke() 方法，正是这个方法决定了怎么样处理代理传递过来的方法调用。
+
+    proxy 代理对象
+    method 代理对象调用的方法
+    args 调用的方法中的参数

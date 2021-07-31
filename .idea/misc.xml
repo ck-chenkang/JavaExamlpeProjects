@@ -5,7 +5,7 @@
     <file url="file://$PROJECT_DIR$/Basic/src/com/ck/common/Knowledge/多态" />
     <file url="file://$PROJECT_DIR$/Basic/src/com/ck/common/Knowledge/静态代码块和static关键字" />
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_8" project-jdk-name="1.8" project-jdk-type="JavaSDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_8" default="false" project-jdk-name="11" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/out" />
   </component>
 </project>

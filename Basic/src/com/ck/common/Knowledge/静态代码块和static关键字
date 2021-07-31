@@ -76,5 +76,41 @@ Java没有全局变量的概念，用static修饰的方法和成员变量，不�
     对于方法，表示不可覆盖，可以通过类名直接访问。
 
 
+疑惑归纳：
+    1、static修饰的变量可以被继承吗？
+    答案：可以被继承，也可以被修改
+    1）创建Person类
+        package com.ck.main;
+
+        public class Person {
+            static String name;
+
+            public Person() {
+                Person.name = "爸爸的名字";
+                System.out.println(Person.name);
+            }
+        }
+    2）创建Student类，并继承Person类
+        package com.ck.main;
+
+        public class Student  extends Person{
+            static String name;
+
+            public Student() {
+                Student.name = "儿子的名字";
+                System.out.println(Student.name);
+            }
+
+            public static void main(String[] args) {
+                Student student = new Student();
+
+                System.out.println(Student.name);
+            }
+        }
+    3）输出结果：
+        爸爸的名字
+        儿子的名字
+        儿子的名字
+
 
 
