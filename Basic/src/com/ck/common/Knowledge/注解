@@ -1,3 +1,598 @@
-注解
-元注解
-    Target表示注解可以用在哪些地方
+参考链接：https://blog.csdn.net/qq1404510094/article/details/80577555 【java注解-最通俗易懂的讲解】
+参考链接：https://blog.csdn.net/javazejian/article/details/71860633 【深入理解注解类型@Annotation】
+
+一、注解：
+    注解如同一张标签
+
+二、注解的定义：
+
+    1）注解通过@interface定义
+        public @interface TestAnnotation {
+        }
+
+    2）注解的应用：
+        @TestAnnotation
+        public class Test {
+        }
+
+三、元注解：
+    注解的注解
+
+    元注解有 @Retention、@Documented、@Target、@Inherited、@Repeatable 5 种。
+
+    1、@Retention
+        Retention 的英文意为保留期的意思。当 @Retention 应用到一个注解上的时候，它解释说明了这个注解的的存活时间。
+
+        Retention用来约束注解的生命周期，分别有三个值，源码级别（source），类文件级别（class）或者运行时级别（runtime），其含有如下：
+
+        SOURCE：注解将被编译器丢弃（该类型的注解信息只会保留在源码里，源码经过编译后，注解信息会被丢弃，不会保留在编译好的class文件里）
+
+        CLASS：注解在class文件中可用，但会被VM丢弃（该类型的注解信息会保留在源码里和class文件里，在执行的时候，不会加载到虚拟机中），
+        请注意，当注解未定义Retention值时，默认值是CLASS，如Java内置注解，@Override、@Deprecated、@SuppressWarnning等
+
+        RUNTIME：注解信息将在运行期(JVM)也保留，因此可以通过反射机制读取注解的信息（源码、class文件和执行的时候都有注解的信息），如SpringMvc中的@Controller、@Autowired、@RequestMapping等。
+
+        作用范围:
+        RetentionPolicy.RUNTIME >  RetentionPolicy.CLASS > RetentionPolicy.SOURCE
+
+    2、@Documented
+        顾名思义，这个元注解肯定是和文档有关。它的作用是能够将注解中的元素包含到 Javadoc 中去。
+
+    3、@Target
+        @Target 用来约束注解可以应用的地方（如方法、类或字段）
+
+        请注意，当注解未指定Target值时，则此注解可以用于任何元素之上，多个值使用{}包含并用逗号隔开，如下：
+        @Target(value={CONSTRUCTOR, FIELD, LOCAL_VARIABLE, METHOD, PACKAGE, PARAMETER, TYPE})
+
+        public enum ElementType {
+            /**标明该注解可以用于类、接口（包括注解类型）或enum声明*/
+            TYPE,
+
+            /** 标明该注解可以用于字段(域)声明，包括enum实例 */
+            FIELD,
+
+            /** 标明该注解可以用于方法声明 */
+            METHOD,
+
+            /** 标明该注解可以用于参数声明 */
+            PARAMETER,
+
+            /** 标明注解可以用于构造函数声明 */
+            CONSTRUCTOR,
+
+            /** 标明注解可以用于局部变量声明 */
+            LOCAL_VARIABLE,
+
+            /** 标明注解可以用于注解声明(应用于另一个注解上)*/
+            ANNOTATION_TYPE,
+
+            /** 标明注解可以用于包声明 */
+            PACKAGE,
+
+            /**
+             * 标明注解可以用于类型参数声明（1.8新加入）
+             * @since 1.8
+             */
+            TYPE_PARAMETER,
+
+            /**
+             * 类型使用声明（1.8新加入)
+             * @since 1.8
+             */
+            TYPE_USE
+        }
+
+    4、@Inherited
+        Inherited 是继承的意思，但是它并不是说注解本身可以继承，而是说如果一个超类被 @Inherited 注解过的注解进行注解的话，那么如果它的子类没有被任何注解应用的话，那么这个子类就继承了超类的注解。
+
+        @Inherited
+        @Retention(RetentionPolicy.RUNTIME)
+        @interface Test {}
+        @Test
+        public class A {}
+        public class B extends A {}
+
+        注解 Test 被 @Inherited 修饰，之后类 A 被 Test 注解，类 B 继承 A,类 B 也拥有 Test 这个注解。
+
+    5、@Repeatable
+        Repeatable 自然是可重复的意思。@Repeatable 是 Java 1.8 才加进来的，所以算是一个新的特性。
+
+        什么样的注解会多次应用呢？通常是注解的值可以同时取多个。
+
+        @interface Persons {
+            Person[]  value();
+        }
+        @Repeatable(Persons.class)
+        @interface Person{
+            String role default "";
+        }
+        @Person(role="artist")
+        @Person(role="coder")
+        @Person(role="PM")
+        public class SuperMan{
+        }
+
+        注意上面的代码，@Repeatable 注解了 Person。而 @Repeatable 后面括号中的类相当于一个容器注解。
+
+        什么是容器注解呢？就是用来存放其它注解的地方。它本身也是一个注解。
+
+        我们再看看代码中的相关容器注解。
+
+        @interface Persons {
+            Person[]  value();
+        }
+
+        按照规定，它里面必须要有一个 value 的属性，属性类型是一个被 @Repeatable 注解过的注解数组，注意它是数组。
+
+        如果不好理解的话，可以这样理解。Persons 是一张总的标签，上面贴满了 Person 这种同类型但内容不一样的标签。把 Persons 给一个 SuperMan 贴上，相当于同时给他贴了程序员、产品经理、画家的标签。
+
+        我们可能对于 @Person(role=”PM”) 括号里面的内容感兴趣，它其实就是给 Person 这个注解的 role 属性赋值为 PM ，大家不明白正常，马上就讲到注解的属性这一块。
+
+三、注解的属性：
+
+    注解的属性也叫作成员变量。注解只有成员变量，没有方法。注解的成员变量在注解的定义中以“无形参的方法”形式来声明，其方法名定义了该成员变量的名字，其返回值定义了该成员变量的类型。
+
+    @Target(ElementType.TYPE)
+    @Retention(RetentionPolicy.RUNTIME)
+    public @interface TestAnnotation {
+        int id();
+        String msg();
+    }
+
+    上面TestAnnotation注解中拥有两个属性，在使用的时候，要给他们赋值。
+
+    赋值的方式是在注解的括号内以value=“”形式，多个属性之间用，隔开。
+
+    @TestAnnotation(id=3,msg="hello annotation")
+    public class Test {
+    }
+
+    注解中属性可以有默认值，默认值需要用default关键字指定，比如：
+    @Target(ElementType.TYPE)
+    @Retention(RetentionPolicy.RUNTIME)
+    public @interface TestAnnotation {
+        public int id() default -1;
+        public String msg() default "Hi";
+    }
+
+    TestAnnotation中id属性默认值为-1，msg属性默认值为Hi。
+    这样在使用的时候，不是必须给他们值。
+    @TestAnnotation()
+    public class Test {}
+
+    另外，还有一种情况。如果一个注解内仅仅只有一个名字为 value 的属性时，应用这个注解时可以直接接属性值填写到括号内。
+
+    public @interface Check {
+        String value();
+    }
+
+
+    @Check("hi")
+    int a;
+    和下面这个效果是一样的：
+    @Check(value="hi")
+    int a;
+
+    有的注解没有任何属性：
+    public @interface Perform {}
+
+    那么在使用这个注解的时候，括号可以省略。
+    @Perform
+    public void testMethod(){}
+
+四、注解属性的数据类型。
+    支持如下数据类型：
+        所有基本类型（int,float,boolean,byte,double,char,long,short），不包括包装类型
+
+        String
+
+        Class
+
+        enum
+
+        Annotation
+
+        上述类型的数组
+
+    倘若使用了其他数据类型，编译器将会丢出一个编译错误，注意，声明注解元素时可以使用基本类型但不允许使用任何包装类型。
+
+    同时还应该注意到注解也可以作为元素的类型，也就是嵌套注解，下面的代码演示了上述类型的使用过程：
+
+        package com.zejian.annotationdemo;
+
+        import java.lang.annotation.ElementType;
+        import java.lang.annotation.Retention;
+        import java.lang.annotation.RetentionPolicy;
+        import java.lang.annotation.Target;
+
+        /**
+         * Created by wuzejian on 2017/5/19.
+         * 数据类型使用Demo
+         */
+
+        @Target(ElementType.TYPE)
+        @Retention(RetentionPolicy.RUNTIME)
+        @interface Reference{
+            boolean next() default false;
+        }
+
+        public @interface AnnotationElementDemo {
+            //枚举类型
+            enum Status {FIXED,NORMAL};
+
+            //声明枚举
+            Status status() default Status.FIXED;
+
+            //布尔类型
+            boolean showSupport() default false;
+
+            //String类型
+            String name()default "";
+
+            //class类型
+            Class<?> testCase() default Void.class;
+
+            //注解嵌套
+            Reference reference() default @Reference(next=true);
+
+            //数组类型
+            long[] value();
+        }
+
+五、注解对默认值的限制：
+    编译器对元素的默认值有些过分挑剔。首先，元素不能有不确定的值。也就是说，元素必须要么具有默认值，要么在使用注解时提供元素的值。
+    其次，对于非基本类型的元素，无论是在源代码中声明，还是在注解接口中定义默认值，都不能以null作为值，
+    这就是限制，没有什么利用可言，但造成一个元素的存在或缺失状态，
+    因为每个注解的声明中，所有的元素都存在，并且都具有相应的值，为了绕开这个限制，只能定义一些特殊的值，例如空字符串或负数，表示某个元素不存在。
+
+六、java预置的注解：
+    @Override：
+        提示子类要复写父类中被@Override修饰的方法
+
+    @Deprecated
+        这个元素是用来标记过时的元素，想必大家在日常开发中经常碰到。
+        编译器在编译阶段遇到这个注解时会发出提醒警告，告诉开发者正在调用一个过时的元素比如过时的方法、过时的类、过时的成员变量。
+
+    @SuppressWarnings
+        阻止警告的意思。之前说过调用被 @Deprecated 注解的方法后，编译器会警告提醒，而有时候开发者会忽略这种警告，他们可以在调用的地方通过 @SuppressWarnings 达到目的。
+
+        @SuppressWarnings("deprecation")
+        public void test1(){
+            Hero hero = new Hero();
+            hero.say();
+            hero.speak();
+        }
+
+    @SafeVarargs
+        参数安全类型注解。它的目的是提醒开发者不要用参数做一些不安全的操作,它的存在会阻止编译器产生 unchecked 这样的警告。它是在 Java 1.7 的版本中加入的。
+
+        @SafeVarargs // Not actually safe!
+            static void m(List<String>... stringLists) {
+            Object[] array = stringLists;
+            List<Integer> tmpList = Arrays.asList(42);
+            array[0] = tmpList; // Semantically invalid, but compiles without warnings
+            String s = stringLists[0].get(0); // Oh no, ClassCastException at runtime!
+        }
+
+        上面的代码中，编译阶段不会报错，但是运行时会抛出 ClassCastException 这个异常，所以它虽然告诉开发者要妥善处理，但是开发者自己还是搞砸了。
+
+        Java 官方文档说，未来的版本会授权编译器对这种不安全的操作产生错误警告。
+
+    @FunctionalInterface:
+        函数式接口注解，这个是 Java 1.8 版本引入的新特性。函数式编程很火，所以 Java 8 也及时添加了这个特性。
+
+        函数式接口 (Functional Interface) 就是一个具有一个方法的普通接口。
+        比如
+        @FunctionalInterface
+        public interface Runnable {
+            /**
+             * When an object implementing interface <code>Runnable</code> is used
+             * to create a thread, starting the thread causes the object's
+             * <code>run</code> method to be called in that separately executing
+             * thread.
+             * <p>
+             * The general contract of the method <code>run</code> is that it may
+             * take any action whatsoever.
+             *
+             * @see     java.lang.Thread#run()
+             */
+            public abstract void run();
+        }
+        我们进行线程开发中常用的 Runnable 就是一个典型的函数式接口，上面源码可以看到它就被 @FunctionalInterface 注解。
+
+        可能有人会疑惑，函数式接口标记有什么用，这个原因是函数式接口可以很容易转换为 Lambda 表达式。这是另外的主题了，有兴趣的同学请自己搜索相关知识点学习。
+
+ 七、注解与反射（参考链接1中的讲解）：
+    注解通过反射获取。首先可以通过 Class 对象的 isAnnotationPresent() 方法判断它是否应用了某个注解
+    public boolean isAnnotationPresent(Class<? extends Annotation> annotationClass) {}
+
+    然后通过 getAnnotation() 方法来获取 Annotation 对象。
+    public <A extends Annotation> A getAnnotation(Class<A> annotationClass) {}
+
+    或者是 getAnnotations() 方法。
+    public Annotation[] getAnnotations() {}
+
+    前一种方法返回指定类型的注解，后一种方法返回注解到这个元素上的所有注解。
+
+    如果获取到的 Annotation 如果不为 null，则就可以调用它们的属性方法了。比如
+    @TestAnnotation()
+    public class Test {
+        public static void main(String[] args) {
+            boolean hasAnnotation = Test.class.isAnnotationPresent(TestAnnotation.class);
+            if ( hasAnnotation ) {
+                TestAnnotation testAnnotation = Test.class.getAnnotation(TestAnnotation.class);
+                System.out.println("id:"+testAnnotation.id());
+                System.out.println("msg:"+testAnnotation.msg());
+            }
+        }
+    }
+
+    程序的运行结果是：
+    id:-1
+    msg:
+
+    这个正是 TestAnnotation 中 id 和 msg 的默认值。
+
+
+    自己例子：
+        1）注解
+        package com.ck.main;
+
+        import java.lang.annotation.ElementType;
+        import java.lang.annotation.Retention;
+        import java.lang.annotation.RetentionPolicy;
+        import java.lang.annotation.Target;
+
+        @Target(ElementType.TYPE)
+        @Retention(RetentionPolicy.RUNTIME)
+        public @interface Test2 {
+            String value();
+        }
+
+        2）通过反射，拿到值
+        package com.ck.main;
+
+        import java.lang.annotation.Annotation;
+
+        @Test2("Hello World")
+        public class MyAnnotation {
+
+            public static void main(String[] args) {
+                try {
+                    Class aClass = Class.forName("com.ck.main.MyAnnotation");
+                    Test2 annotation1 = (Test2) aClass.getAnnotation(Test2.class);
+                    System.out.println("annotation1:    " + annotation1.value()); // annotation1:    Hello World
+
+                } catch (ClassNotFoundException e) {
+                    e.printStackTrace();
+                }
+            }
+
+        }
+
+
+
+    上面的例子中，只是检阅出了注解在类上的注解，其实属性、方法上的注解照样是可以的。同样还是要假手于反射。
+    @TestAnnotation(msg="hello")
+    public class Test {
+        @Check(value="hi")
+        int a;
+        @Perform
+        public void testMethod(){}
+        @SuppressWarnings("deprecation")
+        public void test1(){
+            Hero hero = new Hero();
+            hero.say();
+            hero.speak();
+        }
+        public static void main(String[] args) {
+            boolean hasAnnotation = Test.class.isAnnotationPresent(TestAnnotation.class);
+            if ( hasAnnotation ) {
+                TestAnnotation testAnnotation = Test.class.getAnnotation(TestAnnotation.class);
+                //获取类的注解
+                System.out.println("id:"+testAnnotation.id());
+                System.out.println("msg:"+testAnnotation.msg());
+            }
+            try {
+                Field a = Test.class.getDeclaredField("a");
+                a.setAccessible(true);
+                //获取一个成员变量上的注解
+                Check check = a.getAnnotation(Check.class);
+                if ( check != null ) {
+                    System.out.println("check value:"+check.value());
+                }
+                Method testMethod = Test.class.getDeclaredMethod("testMethod");
+                if ( testMethod != null ) {
+                    // 获取方法中的注解
+                    Annotation[] ans = testMethod.getAnnotations();
+                    for( int i = 0;i < ans.length;i++) {
+                        System.out.println("method testMethod annotation:"+ans[i].annotationType().getSimpleName());
+                    }
+                }
+            } catch (NoSuchFieldException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+                System.out.println(e.getMessage());
+            } catch (SecurityException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+                System.out.println(e.getMessage());
+            } catch (NoSuchMethodException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+                System.out.println(e.getMessage());
+            }
+        }
+    }
+    结果如下：
+    id:-1
+    msg:hello
+    check value:hi
+    method testMethod annotation:Perform
+
+八、注解与反射（参考链接2中的讲解）：
+
+    前面经过反编译后，我们知道Java所有注解都继承了Annotation接口，
+    也就是说　Java使用Annotation接口代表注解元素，该接口是所有Annotation类型的父接口。
+    同时为了运行时能准确获取到注解的相关信息，Java在java.lang.reflect
+    反射包下新增了AnnotatedElement接口，它主要用于表示目前正在 VM 中运行的程序中已使用注解的元素，
+    通过该接口提供的方法可以利用反射技术地读取注解的信息，
+    如反射包的Constructor类、Field类、Method类、Package类和Class类都实现了AnnotatedElement接口，
+    它简要含义如下（更多详细介绍可以看 深入理解Java类型信息(Class对象)与反射机制）：
+
+    实现了AnnotatedElement接口：也就是说，Constructor类、Field类、Method类、Package类和Class类都有方法获取应用在他们上面的注解。
+
+    AnnotatedElement接口：
+    返回值	                方法名称	                            说明
+    <A extends Annotation>	getAnnotation(Class<A> annotationClass)	该元素如果存在指定类型的注解，则返回这些注解，否则返回 null。
+    Annotation[]	getAnnotations()	返回此元素上存在的所有注解，包括从父类继承的
+    boolean	isAnnotationPresent(Class<? extends Annotation> annotationClass)	如果指定类型的注解存在于此元素上，则返回 true，否则返回 false。
+    Annotation[]	getDeclaredAnnotations()	返回直接存在于此元素上的所有注解，注意，不包括父类的注解，调用者可以随意修改返回的数组；这不会对其他调用者返回的数组产生任何影响，没有则返回长度为0的数组
+
+九、注解不支持继承：
+    注解是不支持继承的，因此不能使用关键字extends来继承某个@interface，但注解在编译后，编译器会自动继承java.lang.annotation.Annotation接口，这里我们反编译前面定义的DBTable注解
+
+    package com.zejian.annotationdemo;
+
+    import java.lang.annotation.Annotation;
+    //反编译后的代码
+    public interface DBTable extends Annotation
+    {
+        public abstract String name();
+    }
+
+
+最后、注解的使用场景：
+    注解的使用场景
+    我相信博文讲到这里大家都很熟悉了注解，但是有不少同学肯定会问，注解到底有什么用呢？
+
+    对啊注解到底有什么用？
+
+    我们不妨将目光放到 Java 官方文档上来。
+
+    文章开始的时候，我用标签来类比注解。但标签比喻只是我的手段，而不是目的。为的是让大家在初次学习注解时能够不被那些抽象的新概念搞懵。既然现在，我们已经对注解有所了解，我们不妨再仔细阅读官方最严谨的文档。
+
+    注解是一系列元数据，它提供数据用来解释程序代码，但是注解并非是所解释的代码本身的一部分。注解对于代码的运行效果没有直接影响。
+
+    注解有许多用处，主要如下：
+
+    提供信息给编译器： 编译器可以利用注解来探测错误和警告信息
+    编译阶段时的处理： 软件工具可以用来利用注解信息来生成代码、Html文档或者做其它相应处理。
+    运行时的处理： 某些注解可以在程序运行的时候接受代码的提取
+    值得注意的是，注解不是代码本身的一部分。
+    如果难于理解，可以这样看。罗永浩还是罗永浩，不会因为某些人对于他“傻x”的评价而改变，标签只是某些人对于其他事物的评价，但是标签不会改变事物本身，标签只是特定人群的手段。所以，注解同样无法改变代码本身，注解只是某些工具的的工具。
+
+    还是回到官方文档的解释上，注解主要针对的是编译器和其它工具软件(SoftWare tool)。
+
+    当开发者使用了Annotation 修饰了类、方法、Field 等成员之后，这些 Annotation 不会自己生效，必须由开发者提供相应的代码来提取并处理 Annotation 信息。这些处理提取和处理 Annotation 的代码统称为 APT（Annotation Processing Tool)。
+
+    现在，我们可以给自己答案了，注解有什么用？给谁用？给 编译器或者 APT 用的。
+
+    如果，你还是没有搞清楚的话，我亲自写一个好了。
+
+    —— 程序员 A : 我写了一个类，它的名字叫做 NoBug，因为它所有的方法都没有错误。
+    —— 我：自信是好事，不过为了防止意外，让我测试一下如何？
+    —— 程序员 A: 怎么测试？
+    —— 我：把你写的代码的方法都加上 @Jiecha 这个注解就好了。
+    —— 程序员 A: 好的。
+
+    package ceshi;
+    import ceshi.Jiecha;
+    public class NoBug {
+        @Jiecha
+        public void suanShu(){
+            System.out.println("1234567890");
+        }
+        @Jiecha
+        public void jiafa(){
+            System.out.println("1+1="+1+1);
+        }
+        @Jiecha
+        public void jiefa(){
+            System.out.println("1-1="+(1-1));
+        }
+        @Jiecha
+        public void chengfa(){
+            System.out.println("3 x 5="+ 3*5);
+        }
+        @Jiecha
+        public void chufa(){
+            System.out.println("6 / 0="+ 6 / 0);
+        }
+        public void ziwojieshao(){
+            System.out.println("我写的程序没有 bug!");
+        }
+    }
+
+
+    package ceshi;
+    import java.lang.annotation.Retention;
+    import java.lang.annotation.RetentionPolicy;
+    @Retention(RetentionPolicy.RUNTIME)
+    public @interface Jiecha {
+    }
+
+    package ceshi;
+    import java.lang.reflect.InvocationTargetException;
+    import java.lang.reflect.Method;
+    public class TestTool {
+        public static void main(String[] args) {
+            // TODO Auto-generated method stub
+            NoBug testobj = new NoBug();
+            Class clazz = testobj.getClass();
+            Method[] method = clazz.getDeclaredMethods();
+            //用来记录测试产生的 log 信息
+            StringBuilder log = new StringBuilder();
+            // 记录异常的次数
+            int errornum = 0;
+            for ( Method m: method ) {
+                // 只有被 @Jiecha 标注过的方法才进行测试
+                if ( m.isAnnotationPresent( Jiecha.class )) {
+                    try {
+                        m.setAccessible(true);
+                        m.invoke(testobj, null);
+                    } catch (Exception e) {
+                        // TODO Auto-generated catch block
+                        //e.printStackTrace();
+                        errornum++;
+                        log.append(m.getName());
+                        log.append(" ");
+                        log.append("has error:");
+                        log.append("\n\r  caused by ");
+                        //记录测试过程中，发生的异常的名称
+                        log.append(e.getCause().getClass().getSimpleName());
+                        log.append("\n\r");
+                        //记录测试过程中，发生的异常的具体信息
+                        log.append(e.getCause().getMessage());
+                        log.append("\n\r");
+                    }
+                }
+            }
+            log.append(clazz.getSimpleName());
+            log.append(" has  ");
+            log.append(errornum);
+            log.append(" error.");
+            // 生成测试报告
+            System.out.println(log.toString());
+        }
+    }
+
+    测试的结果：
+    1234567890
+    1+1=11
+    1-1=0
+    3 x 5=15
+    chufa has error:
+      caused by ArithmeticException
+    / by zero
+    NoBug has  1 error.
+
+    提示 NoBug 类中的 chufa() 这个方法有异常，这个异常名称叫做 ArithmeticException，原因是运算过程中进行了除 0 的操作。
+
+    所以，NoBug 这个类有 Bug。
+
+    这样，通过注解我完成了我自己的目的，那就是对别人的代码进行测试。
+
+    所以，再问我注解什么时候用？我只能告诉你，这取决于你想利用它干什么用。
+
+
