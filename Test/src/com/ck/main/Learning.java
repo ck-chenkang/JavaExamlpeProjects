@@ -31,6 +31,8 @@ import java.util.List;
  * 线程池
  * java doc
  * 函数式编程，函数式接口
+ * new关键字
+ * java内存分析
  */
 public class Learning {
 
