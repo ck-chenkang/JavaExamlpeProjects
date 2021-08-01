@@ -1,0 +1,128 @@
+参考链接：https://blog.csdn.net/oguro/article/details/52971487 【java数组详解】
+
+一、数组的概念：
+  1、同一种类型数据的集合
+  2、数组可以装任意类型的数据
+  3、定义好的数组，只能装一种元素
+  
+  特定：数组的长度是固定的
+  
+二、数组的好处：
+  数组的最大好处就是能给存储进来的元素自动进行编号，从0开始。方便操作这些数据。
+  
+三、数组的定义：
+  1、
+    元素类型[] 数组名 = new 元素类型[元素个数或数组长度]
+  
+    示例：int[] arr = new int[5];
+  2、
+    元素类型[] 数组名 = new 元素类型[]{元素，元素，……};
+
+    int[] arr = new int[]{3,5,1,7};
+
+    int[] arr = {3,5,1,7};
+    
+    注意：给数组分配空间时，必须指定数组能够存储的元素个数来确定数组大小。创建数组之后不能修改数组的大小。可以使用length 属性获取数组的大小。
+  
+四、数组的初始化：
+  1、   
+
+    int[] arr = { 1, 2, 3, 4, 5 }; // 不使用运算符new
+
+    int[] arr2 = new int[] { 1, 2, 3, 4, 5 };
+
+  2、
+
+    int[] arr3=new int[3];
+
+    arr3[0]=1;
+
+    arr3[1]=5;
+
+    arr3[2]=6;
+    
+五、数组的遍历：
+  
+    1、
+    public static void main(String[] args) {
+
+    int[] x = { 1, 2, 3 };
+
+    for (int y = 0; y < 3; y++) {
+
+    System.out.println(x[y]);
+
+    // System.out.println("x["+y+"]="+x[y]); 打印效果 x[0]=1;
+
+    } // 那么这就是数组的第一个常见操作.遍历
+
+    }
+    
+    2、
+      public static void main(String[] args) {
+
+      int[] x = { 1, 2, 3 };
+
+      for (int y = 0; y < x.length; y++) {
+
+      System.out.println(x[y]);
+
+      // System.out.println("x["+y+"]="+x[y]); 打印效果 x[0]=1;
+
+      } // 那么这就是数组的第一个常见操作.遍历
+
+      }
+    3、foreach：在indea中输入 数组的变量名.fori
+    
+六、数组的常见异常
+  1. NullPointerException 空指针异常
+    原因： 引用类型变量没有指向任何对象，而访问了对象的属性或者是调用了对象的方法。
+    
+    例子：
+      public static void main(String[] args) {
+
+      int[] x = { 1, 2, 3 };
+
+      x = null;
+
+      System.out.println(x[1]);
+
+      // java.lang.NullPointerException
+
+      }
+      
+  2、ArrayIndexOutOfBoundsException 索引值越界。
+    原因：访问了不存在的索引值。
+    
+    例子：
+      public static void main(String[] args) {
+
+      int[] x = { 1, 2, 3 };
+
+      System.out.println(x[3]);
+
+      //java.lang.ArrayIndexOutOfBoundsException
+
+      }
+ 七、Arrarys相关函数的使用：
+    遍历： toString()    将数组的元素以字符串的形式返回
+
+    排序： sort()        将数组按照升序排列
+
+    查找： binarySearch()在指定数组中查找指定元素，返回元素的索引，如果没有找到返回（-插入点-1） 注意：使用查找的功能的时候，数组一定要先排序。
+    
+八、二维数组：
+  实质就是存储是一维数组的数组
+  1、定义：
+   数组类型[][] 数组名 = new 数组类型[一维数组的个数][每一个一维数组中元素的个数];
+  2、初始化：
+    1）静态
+      int[][] a = new int[][]{ {12,34,45,89},{34,56,78,10},{1,3,6,4} };
+    2）动态
+      int value = 0;
+      int[][] a = new int[3][4];
+      for(int i = 0; i < a.length; i++){
+        for(int j = 0; j < a[i].length; j++){
+          a[i][j] = ++value;
+        }
+      }
