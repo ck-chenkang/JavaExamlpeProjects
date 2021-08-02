@@ -9,11 +9,9 @@ import java.util.List;
 
 /**
  * 教程链接：https://www.liaoxuefeng.com/wiki/1252599548343744
- * 注解
- * 反射与注解
+ * 什么是java jvm javac javadoc JDK
  * 静态代理，动态代理
- * main方法参数的使用
- * 数组
+ * hashcode
  * 枚举
  * lambda表达式
  * 静态内部类 局部内部类 匿名内部类，还有一个？
@@ -33,6 +31,32 @@ import java.util.List;
  * 函数式编程，函数式接口
  * new关键字
  * java内存分析
+ * jvm面试问题：
+ *  谈谈你对jvm的理解？ java8虚拟机和之间的变化更新
+ *  什么是oom，什么是栈溢出stackoverflowerror？怎么分析
+ *  jvm的常用调优参数有哪些
+ *  内存快照如何抓取，怎么分析Dump文件
+ *  谈谈jvm中，你对类加载器的认识
+ * 1、jvm的位置
+ * 2、jvm的体系结构
+ * 3、类加载器
+ * 4、双亲委派机制
+ * 5、沙箱安全机制
+ * 6、Native
+ * 7、PC寄存器
+ * 8、方法区
+ * 9、栈
+ * 10、三种jvm
+ * 11、堆
+ * 12、新生区、老年区
+ * 13、永久区
+ * 14、堆内存调优
+ * 15、Gc
+ *  1、常用算法
+ * 16、JMM
+ *
+ * jvm思维导图
+ *
  */
 public class Learning {
 
