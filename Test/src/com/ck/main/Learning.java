@@ -46,22 +46,26 @@ import java.util.List;
  * 7、PC寄存器
  * 8、方法区
  * 9、栈
- * 10、三种jvm
+ * 10、三种jvm：sun公司、orcale、IBM
  * 11、堆
  * 12、新生区、老年区
  * 13、永久区
  * 14、堆内存调优
+ * jprofilter安装
+ * java Dump文件
  * 15、Gc
  *  1、常用算法
  * 16、JMM
- *
  * jvm思维导图
+ * 异常
  *
  */
 public class Learning {
 
 
     public static void main(String[] args) {
+        long l = Runtime.getRuntime().maxMemory();
+        System.out.println((double)l/1024/1024/1024);
 
     }
 }
