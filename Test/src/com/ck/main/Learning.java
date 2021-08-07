@@ -14,12 +14,13 @@ import java.util.List;
  * 设计模式
  * date时间、日期
  * 函数式编程，函数式接口
+ * tomcat：下载、配置、目录结构
+ *
  */
 public class Learning {
 
     public static void main(String[] args) {
-        long l = Runtime.getRuntime().maxMemory();
-        System.out.println((double)l/1024/1024/1024);
+        System.out.println("Hello World");
 
     }
 
