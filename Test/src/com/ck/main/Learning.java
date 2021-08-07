@@ -9,8 +9,6 @@ import java.util.List;
 
 /**
  * 教程链接：https://www.liaoxuefeng.com/wiki/1252599548343744
- * hashcode
- * 枚举
  * lambda表达式
  * 静态内部类 局部内部类 匿名内部类，还有一个？
  * 范型
