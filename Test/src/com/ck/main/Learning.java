@@ -9,8 +9,6 @@ import java.util.List;
 
 /**
  * 教程链接：https://www.liaoxuefeng.com/wiki/1252599548343744
- * 什么是java jvm javac javadoc JDK
- * 静态代理，动态代理
  * hashcode
  * 枚举
  * lambda表达式
