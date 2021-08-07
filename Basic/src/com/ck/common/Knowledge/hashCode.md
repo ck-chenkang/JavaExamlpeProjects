@@ -102,7 +102,7 @@ Java的超类Object类已经定义了equals()和hashCode()方法，在Obeject类
 
 在将这个问题的答案之前，我们先了解一下将元素放入集合的流程，如下图：
 
-![image1][image]
+![111][https://raw.githubusercontent.com/ck-chenkang/JavaExamlpeProjects/master/Basic/Imag/20181006223820503.png]
 
 
 
