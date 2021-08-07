@@ -9,9 +9,6 @@ import java.util.List;
 
 /**
  * 教程链接：https://www.liaoxuefeng.com/wiki/1252599548343744
- * lambda表达式
- * 静态内部类 局部内部类 匿名内部类，还有一个？
- * 范型
  * 加密与安全
  * maven基础
  * json与xml
@@ -22,13 +19,10 @@ import java.util.List;
  * 文件读取、写入
  * date时间、日期
  * 类加载器，类初始化，类装载顺序
- * 线程池
- * java doc
  * 函数式编程，函数式接口
  * new关键字
- * java内存分析
  * jvm面试问题：
- *  谈谈你对jvm的理解？ java8虚拟机和之间的变化更新
+ *  谈谈你对jvm的理解？ java8虚拟机和之前的变化更新
  *  什么是oom，什么是栈溢出stackoverflowerror？怎么分析
  *  jvm的常用调优参数有哪些
  *  内存快照如何抓取，怎么分析Dump文件
