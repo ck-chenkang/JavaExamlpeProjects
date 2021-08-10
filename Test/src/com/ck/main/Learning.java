@@ -20,6 +20,8 @@ import java.util.List;
  * maven下载、安装、系统环境变量配置、mirror配置、本地仓库
  * idea创建maven工程（需要注意需要填写的gav的标准）、idea中maven设置、maven项目目录结构
  * idea中maven侧边栏、pom.xml文件、gav、properties、dependencies
+ * idea中servelet hello world项目、Tomcat配置
+ * servlet原理
  *
  *
  */
