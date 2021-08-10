@@ -1,0 +1,3 @@
+- 控制面板找到java右键，卸载
+- cmd Regedit 我的电脑 HEY_LOCAL_MACHINE  SOFTWARE  JAVASOFT若有就删除
+- 相关环境变量也需要删除
