@@ -77,6 +77,10 @@ Maven home directory  maven的安装目录
 User settings file maven的setting.xml
 local repository maven本地仓库
 
+## Maven生命周期及常用命令
+
+
+
 ## pom.xml
 
 参考链接 [Maven之pom.xml配置文件详解](https://blog.csdn.net/qq_33363618/article/details/79438044) CSDN超高收藏
