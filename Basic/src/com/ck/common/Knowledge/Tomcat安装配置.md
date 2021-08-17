@@ -1,7 +1,7 @@
 ## Tomcat安装
 
 1. 百度搜索Tomcat，第一个，进去之后，左侧侧边栏，选择下载，有不同的版本，10，9等，我选择了10，
-   windows环境下，我选择了apache-tomcat-10.0.-windows-x64.zip
+   windows环境下，我选择了core下面的 apache-tomcat-10.0.-windows-x64.zip(后又换成了tomcat9)
 2. 解压，并放好
 3. 进入安装包bin目录下，cmd，输入startup.bat
 4. 浏览器输入127.0.0.1:8080，看到了tomcat的页面
@@ -14,6 +14,15 @@
 ## IDEA配置tomcat
 
 参考 创建MyFirstWebapp.md
+
+## Tomcat在IDEA中中文显示异常问题
+
+参考链接中第三个解决方法 [Windows 下 Tomcat 命令窗口显示乱码问题解决](https://blog.csdn.net/qq_26629277/article/details/89372804)
+
+修改D:\JavaEnv\apache-tomcat-9.0.52\conf\logging.properties
+在最后加上 java.util.logging.ConsoleHandler.encoding = GBK，在前面加上不管用
+
+
 
 ## Tomcat目录结构
 
