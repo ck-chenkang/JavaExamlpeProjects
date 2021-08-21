@@ -10,6 +10,13 @@ ServletContex
 - 获取初始化参数
 - 请求转发：路径不变；和重定向不一样
 - 读取资源文件
+HttpServletResponse
+- 下载文件
+- 设置浏览器5秒刷新一次
+- 设置图片没有缓存
+- 其他头和体设置
+- 
+HttpServletRequest
 web容器
 Tomcat原理
 jdbc
