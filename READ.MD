@@ -21,3 +21,4 @@ web容器
 Tomcat原理
 jdbc
 热部署
+cookie和session的区别
