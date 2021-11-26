@@ -92,7 +92,7 @@ public class FirstBean {
 }
 ```
 
-### 通过构造方法注入
+### 一、通过构造方法注入
 
 ```
 @Component
@@ -111,7 +111,7 @@ public class SecondBean {
 }
 ```
 
-### 通过Set方法注入
+### 二、通过Set方法注入
 
 ```
 @Component
@@ -130,7 +130,7 @@ public class ThirdBean {
 }
 ```
 
-### 通过属性注入
+### 三、通过属性注入
 
 ```
 @Component
@@ -145,7 +145,7 @@ public class FourthBean {
 }
 ```
 
-### 通过集合注入Bean
+### 四、通过集合注入Bean
 
 新建一个类FirthBean，标记为Bean。 加入一个List类型 的属性，用@Autowired注入。
 在配置类中对加入一个返回值为List的方法或者加两个返回String的方法，使用Bean注解，这样就完成集合的赋值。
