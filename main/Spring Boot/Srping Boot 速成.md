@@ -1359,7 +1359,7 @@ public class SwaggerConfig {
 
 【友情提示】可能有很多朋友在配置 Swagger 的时候会遇到下面的情况，而且还关不掉的，这是因为浏览器缓存引起的，清空一下浏览器缓存即可解决问题。
 
-[外链图片转存失败,源站可能有防盗链机制,建议将图片保存下来直接上传(img-gBvZvwz7-1595163751524)(http://p99jlm9k5.bkt.clouddn.com/blog/images/1/error.png)]
+![image-20211129215700559](Imag/image-20211129215700559.png)
 
 ## 4. Swagger2 的使用
 
