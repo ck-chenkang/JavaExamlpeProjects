@@ -735,7 +735,6 @@ logging:
   config: logback.xml
   level:
     com.itcodai.course03.dao: trace
-1234
 ```
 
 `logging.config` 是用来指定项目启动的时候，读取哪个配置文件，这里指定的是日志配置文件是根路径下的 `logback.xml` 文件，关于日志的相关配置信息，都放在 `logback.xml` 文件中了。`logging.level` 是用来指定具体的 mapper 中日志的输出级别，上面的配置表示 `com.itcodai.course03.dao` 包下的所有 mapper 日志输出级别为 trace，会将操作数据库的 sql 打印出来，开发时设置成 trace 方便定位问题，在生产环境上，将这个日志级别再设置成 error 级别即可（本节课不讨论 mapper 层，在后面 Spring Boot 集成 MyBatis 时再详细讨论）。
@@ -1156,7 +1155,6 @@ public String testRequestParam(@RequestParam Integer id) {
 	System.out.println("获取到的id为：" + id);
 	return "success";
 }
-12345
 ```
 
 可以正常从控制台打印出 id 信息。同样地，url 上面的参数和方法的参数需要一致，如果不一致，也需要使用 value 属性来说明，比如 url 为：`http://localhost:8080/user?idd=1`
@@ -1167,7 +1165,6 @@ public String testRequestParam(@RequestParam(value = "idd", required = false) In
 	System.out.println("获取到的id为：" + id);
 	return "success";
 }
-12345
 ```
 
 除了 value 属性外，还有个两个属性比较常用：
@@ -1179,12 +1176,11 @@ public String testRequestParam(@RequestParam(value = "idd", required = false) In
 
 ```java
 @PostMapping("/form1")
-    public String testForm(@RequestParam String username, @RequestParam String password) {
-        System.out.println("获取到的username为：" + username);
-        System.out.println("获取到的password为：" + password);
-        return "success";
-    }
-123456
+public String testForm(@RequestParam String username, @RequestParam String password) {
+    System.out.println("获取到的username为：" + username);
+    System.out.println("获取到的password为：" + password);
+    return "success";
+}
 ```
 
 我们使用 postman 来模拟一下表单提交，测试一下接口：
@@ -1206,12 +1202,11 @@ public class User {
 
 ```java
 @PostMapping("/form2")
-    public String testForm(User user) {
-        System.out.println("获取到的username为：" + user.getUsername());
-        System.out.println("获取到的password为：" + user.getPassword());
-        return "success";
-    }
-123456
+public String testForm(User user) {
+    System.out.println("获取到的username为：" + user.getUsername());
+    System.out.println("获取到的password为：" + user.getPassword());
+    return "success";
+}
 ```
 
 使用 postman 再次测试一下表单提交，观察一下返回值和控制台打印出的日志即可。在实际项目中，一般都是封装一个实体类来接收表单数据，因为实际项目中表单数据一般都很多。
@@ -1293,7 +1288,6 @@ public String testRequestBody(@RequestBody User user) {
 	<artifactId>springfox-swagger-ui</artifactId>
 	<version>2.2.2</version>
 </dependency>
-12345678910
 ```
 
 ## 3. Swagger2 的配置
@@ -1348,7 +1342,6 @@ public class SwaggerConfig {
                 .build();
     }
 }
-1234567891011121314151617181920212223242526272829303132333435363738394041424344454647
 ```
 
 在该配置类中，已经使用注释详细解释了每个方法的作用了，在此不再赘述。到此为止，我们已经配置好了 Swagger2 了。现在我们可以测试一下配置有没有生效，启动项目，在浏览器中输入 `localhost:8080/swagger-ui.html`，即可看到 swagger2 的接口页面，如下图所示，说明Swagger2 集成成功。
@@ -1425,7 +1418,6 @@ public class TestController {
         return new JsonResult(user);
     }
 }
-1234567891011121314151617181920212223
 ```
 
 我们来学习一下 `@Api` 、 `@ApiOperation` 和 `@ApiParam` 注解。
@@ -1534,7 +1526,6 @@ spring:
     这是404页面
 </body>
 </html>
-12345678910
 ```
 
 我们再写一个 controller 来测试一下 404 和 500 页面：
@@ -1555,7 +1546,6 @@ public class ThymeleafController {
         return "index";
     }
 }
-123456789101112131415
 ```
 
 > 当我们在浏览器中输入 `localhost:8080/thymeleaf/test400` 时，故意输入错误，找不到对应的方法，就会跳转到 404.html 显示。
@@ -1656,7 +1646,6 @@ public String getList(Model model) {
 </form>
 </body>
 </html>
-123456789101112131415
 ```
 
 可以看出，其实和处理单个对象信息差不多，Thymeleaf 使用 `th:each` 进行遍历，`${}` 取 model 中传过来的参数，然后自定义 list 中取出来的每个对象，这里定义为 blogger。表单里面可以直接使用 `${对象.属性名}` 来获取 list 中对象的属性值，也可以使用 `${对象.get方法}` 来获取，这点和上面处理对象信息是一样的，但是不能使用 `*{属性名}` 来获取对象中的属性，thymeleaf 模板获取不到。
@@ -1734,7 +1723,6 @@ public class GlobalExceptionHandler {
     private static final Logger logger = LoggerFactory.getLogger(GlobalExceptionHandler.class);
     // ……
 }
-1234567
 ```
 
 我们点开 `@ControllerAdvice` 注解可以看到，`@ControllerAdvice` 注解包含了 `@Component` 注解，说明在 Spring Boot 启动时，也会把该类作为组件交给 Spring 来管理。除此之外，该注解还有个 `basePackages` 属性，该属性是用来拦截哪个包中的异常信息，一般我们不指定这个属性，我们拦截项目工程中的所有异常。`@ResponseBody` 注解是为了异常处理完之后给调用方输出一个 json 格式的封装数据。
@@ -1759,7 +1747,6 @@ public JsonResult handleHttpMessageNotReadableException(
     logger.error("缺少请求参数，{}", ex.getMessage());
     return new JsonResult("400", "缺少必要的请求参数");
 }
-123456789101112
 ```
 
 我们来写个简单的 Controller 测试一下该异常，通过 POST 请求方式接收两个参数：姓名和密码。
@@ -1779,7 +1766,6 @@ public class ExceptionController {
         return new JsonResult();
     }
 }
-1234567891011121314
 ```
 
 然后使用 Postman 来调用一下该接口，调用的时候，只传姓名，不传密码，就会抛缺少参数异常，该异常被捕获之后，就会进入我们写好的逻辑，给调用方返回一个友好信息，如下：
@@ -1812,14 +1798,12 @@ public class GlobalExceptionHandler {
         return new JsonResult("500", "空指针异常了");
     }
 }
-123456789101112131415161718
 ```
 
 这个我就不测试了，代码中 ExceptionController 有个 `testNullPointException` 方法，模拟了一个空指针异常，我们在浏览器中请求一下对应的 url 即可看到返回的信息：
 
 ```json
 {"code":"500","msg":"空指针异常了"}
-1
 ```
 
 ### 2.3 一劳永逸？
@@ -1844,7 +1828,6 @@ public class GlobalExceptionHandler {
         return new JsonResult("500", "系统发生异常，请联系管理员");
     }
 }
-1234567891011121314151617
 ```
 
 但是项目中，我们一般都会比较详细的去拦截一些常见异常，拦截 Exception 虽然可以一劳永逸，但是不利于我们去排查或者定位问题。实际项目中，可以把拦截 Exception 异常写在 GlobalExceptionHandler 最下面，如果都没有找到，最后再拦截一下 Exception 异常，保证输出信息友好。
@@ -1888,7 +1871,6 @@ public enum BusinessMsgEnum {
     }
 	// set get方法
 }
-123456789101112131415161718192021222324252627282930
 ```
 
 ### 3.2 拦截自定义异常
@@ -1965,7 +1947,6 @@ public class ExceptionController {
         return new JsonResult();
     }
 }
-12345678910111213141516
 ```
 
 运行一下项目，测试一下，返回 json 如下，说明我们自定义的业务异常捕获成功：
@@ -2002,7 +1983,6 @@ AOP：Aspect Oriented Programming 的缩写，意为：面向切面编程。面�
 	<groupId>org.springframework.boot</groupId>
 	<artifactId>spring-boot-starter-aop</artifactId>
 </dependency>
-1234
 ```
 
 ### 2.2 实现 AOP 切面
@@ -2015,7 +1995,6 @@ Spring Boot 中使用 AOP 非常简单，假如我们要在项目中打印一些
 public class LogAspectHandler {
 
 }
-12345
 ```
 
 这里主要介绍几个常用的注解及使用：
@@ -2041,7 +2020,6 @@ public class LogAspectHandler {
     @Pointcut("execution(* com.itcodai.course09.controller..*.*(..))")
     public void pointCut() {}
 }
-12345678910
 ```
 
 `@Pointcut` 注解指定一个切面，定义需要拦截的东西，这里介绍两个常用的表达式：一个是使用 `execution()`，另一个是使用 `annotation()`。
@@ -2058,7 +2036,6 @@ public class LogAspectHandler {
 ```java
 @Pointcut("@annotation(org.springframework.web.bind.annotation.GetMapping)")
 public void annotationCut() {}
-12
 ```
 
 然后使用该切面的话，就会切入注解是 `@GetMapping` 的方法。因为在实际项目中，可能对于不同的注解有不同的逻辑处理，比如 `@GetMapping`、`@PostMapping`、`@DeleteMapping` 等。所以这种按照注解的切入方式在实际项目中也很常用。
@@ -2100,7 +2077,6 @@ public class LogAspectHandler {
         logger.info("用户请求的url为：{}，ip地址为：{}", url, ip);
     }
 }
-1234567891011121314151617181920212223242526272829303132
 ```
 
 JointPoint 对象很有用，可以用它来获取一个签名，然后利用签名可以获取请求的包名、方法名，包括参数（通过 `joinPoint.getArgs()` 获取）等等。
@@ -2135,7 +2111,6 @@ public class LogAspectHandler {
         logger.info("方法{}已经执行完", method);
     }
 }
-12345678910111213141516171819202122232425
 ```
 
 到这里，我们来写一个 Controller 来测试一下执行结果，新建一个 AopController 如下：
@@ -2150,7 +2125,6 @@ public class AopController {
         return "Hello " + name;
     }
 }
-123456789
 ```
 
 启动项目，在浏览器中输入 `localhost:8080/aop/CSDN`，观察一下控制台的输出信息：
@@ -2192,7 +2166,6 @@ public class LogAspectHandler {
         logger.info("对返回参数进行业务上的增强：{}", result + "增强版");
     }
 }
-123456789101112131415161718192021
 ```
 
 需要注意的是：在 `@AfterReturning`注解 中，属性 `returning` 的值必须要和参数保持一致，否则会检测不到。该方法中的第二个入参就是被切方法的返回值，在 `doAfterReturning` 方法中可以对返回值进行增强，可以根据业务需要做相应的封装。我们重启一下服务，再测试一下（多余的 log 我不贴出来了）：
@@ -2200,7 +2173,6 @@ public class LogAspectHandler {
 ```
 方法testAop执行完毕，返回参数为：Hello CSDN  
 对返回参数进行业务上的增强：Hello CSDN增强版
-12
 ```
 
 #### 2.2.5 @AfterThrowing 注解
@@ -2266,7 +2238,6 @@ Spring Boot 集成 MyBatis，需要导入 `mybatis-spring-boot-starter` 和 mysq
 	<artifactId>mysql-connector-java</artifactId>
 	<scope>runtime</scope>
 </dependency>
-12345678910
 ```
 
 我们点开 `mybatis-spring-boot-starter` 依赖，可以看到我们之前使用 Spring 时候熟悉的依赖，就像我在课程的一开始介绍的那样，Spring Boot 致力于简化编码，使用 starter 系列将相关依赖集成在一起，开发者不需要关注繁琐的配置，非常方便。
@@ -2281,7 +2252,6 @@ Spring Boot 集成 MyBatis，需要导入 `mybatis-spring-boot-starter` 和 mysq
     <groupId>org.mybatis</groupId>
     <artifactId>mybatis-spring</artifactId>
 </dependency>
-123456789
 ```
 
 ## 2.2 properties.yml配置
@@ -2314,7 +2284,6 @@ mybatis:
     map-underscore-to-camel-case: true # 驼峰命名规范
   mapper-locations: # mapper映射文件位置
     - classpath:mapper/*.xml
-12345678910111213141516171819202122232425
 ```
 
 我们来简单介绍一下上面的这些配置：关于数据库的相关配置，我就不详细的解说了，这点相信大家已经非常熟练了，配置一下用户名、密码、数据库连接等等，这里使用的连接池是 Spring Boot 自带的 hikari，感兴趣的朋友可以去百度或者谷歌搜一搜，了解一下。
@@ -2340,7 +2309,6 @@ mybatis:
        select * from user where user_name = #{username}
   </select>
 </mapper>
-1234567891011121314
 ```
 
 这和整合 Spring 一样的，namespace 中指定的是对应的 Mapper， `<resultMap>` 中指定对应的实体类，即 User。然后在内部指定表的字段和实体的属性相对应即可。这里我们写一个根据用户名查询用户的 sql。
@@ -2349,7 +2317,6 @@ mybatis:
 
 ```java
 User getUserByName(String username);
-1
 ```
 
 中间省略 service 的代码，我们写一个 Controller 来测试一下：
@@ -2366,7 +2333,6 @@ public class TestController {
         return userService.getUserByName(name);
     }
 }
-1234567891011
 ```
 
 启动项目，在浏览器中输入：`http://localhost:8080/getUserByName/CSDN` 即可查询到数据库表中用户名为 CSDN 的用户信息（事先搞两个数据进去即可）：
@@ -2387,7 +2353,6 @@ public class Course10Application {
 		SpringApplication.run(Course10Application.class, args);
 	}
 }
-12345678
 ```
 
 这样的话，`com.itcodai.course10.dao` 包下的所有 mapper 都会被扫描到了。
