@@ -1,5 +1,3 @@
-
-
 # @Autowired 用法
 
 一、在spring中，可以自动装配具有 @Autowired 和 @Resource 、@Inject注解的属性.
@@ -9,6 +7,8 @@
 的属性。@Autowired 和 @Resource 、@Inject实现的功能相似，@Autowired实现的比后两者更全面，因此大部分都用@Autowired注
 
 解。另外@Resource 、@Inject注解中没有reqired 属性，该属性用法在下面进行举例。
+
+**Autowired  是根据类型注入的，结合Qualifier根据名字注入，Resource可以根据类型也可以根据名字，**
 
 @Autowired注解使用范围：
 
@@ -65,7 +65,8 @@ public class ComponentBean {
         this.controllerBean = controllerBean;
     }
     */
-    public void show() {
+    public void show() { 0.
+    
         System.out.println("ComponentBean........");
         controllerBean.show();
     }

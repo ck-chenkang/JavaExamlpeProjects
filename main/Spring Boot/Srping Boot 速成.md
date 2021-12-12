@@ -2364,7 +2364,6 @@ public class Course10Application {
 ```java
 @Select("select * from user where id = #{id}")
 User getUser(Long id);
-12
 ```
 
 这跟 xml 文件中写 sql 语句是一样的，这样就不需要 xml 文件了，但是有个问题，有人可能会问，如果是两个参数呢？如果是两个参数，我们需要使用 `@Param` 注解来指定每一个参数的对应关系，如下：
@@ -2372,7 +2371,6 @@ User getUser(Long id);
 ```java
 @Select("select * from user where id = #{id} and user_name=#{name}")
 User getUserByIdAndName(@Param("id") Long id, @Param("name") String username);
-12
 ```
 
 可以看出，`@Param` 指定的参数应该要和 sql 中 `#{}` 取的参数名相同，不同则取不到。可以在 controller 中自行测试一下，接口都在源码中，文章中我就不贴测试代码和结果了。
@@ -2386,7 +2384,6 @@ User getUserByIdAndName(@Param("id") Long id, @Param("name") String username);
         @Result(property = "password", column = "password")
 })
 User getUser(Long id);
-123456
 ```
 
 `@Results` 中的 `@Result` 注解是用来指定每一个属性和字段的对应关系，这样的话就可以解决上面说的这个问题了。
@@ -2397,14 +2394,12 @@ User getUser(Long id);
 @Select("select * from user where id = #{id}")
 @ResultMap("BaseResultMap")
 User getUser(Long id);
-123
 ```
 
 `@ResultMap` 注解中的值从哪来呢？对应的是 UserMapper.xml 文件中定义的 `<resultMap>` 时对应的 id 值：
 
 ```xml
 <resultMap id="BaseResultMap" type="com.itcodai.course10.entity.User">
-1
 ```
 
 这种 xml 和注解结合着使用的情况也很常见，而且也减少了大量的代码，因为 xml 文件可以使用自动生成工具去生成，也不需要人为手动敲，所以这种使用方式也很常见。
