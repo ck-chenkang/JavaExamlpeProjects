@@ -2453,10 +2453,9 @@ public interface UserMapper {
     @Insert("insert into user (user_name, password) values (#{username}, #{password})")
     Integer insertUser(User user);
 }
-12345
 ```
 
-OK，接下来我们来测试一下 Spring Boot 中的事务处理，在 service 层，我们手动抛出个异常来模拟实际中出现的异常，然后观察一下事务有没有回滚，如果数据库中没有新的记录，则说明事务回滚成功。
+OK，接下来我们来测试一下 Spring Boot 中的事`务处理，在 service 层，我们手动抛出个异常来模拟实际中出现的异常，然后观察一下事务有没有回滚，如果数据库中没有新的记录，则说明事务回滚成功。
 
 ```java
 @Service
@@ -2527,7 +2526,6 @@ public class UserServiceImpl implements UserService {
         throw new SQLException("数据库异常");
     }
 }
-123456789101112131415
 ```
 
 我们看上面这个代码，其实并没有什么问题，手动抛出一个 `SQLException` 来模拟实际中操作数据库发生的异常，在这个方法中，既然抛出了异常，那么事务应该回滚，实际却不如此，读者可以使用我源码中 controller 的接口，通过 postman 测试一下，就会发现，仍然是可以插入一条用户数据的。
@@ -2633,7 +2631,6 @@ public class UserService {
         return new User(1L, "倪升武", "123456");
     }
 }
-123456789101112
 ```
 
 然后写一个监听器，实现 `ApplicationListener<ContextRefreshedEvent>` 接口，重写 `onApplicationEvent` 方法，将 ContextRefreshedEvent 对象传进去。如果我们想在加载或刷新应用上下文时，也重新刷新下我们预加载的资源，就可以通过监听 ContextRefreshedEvent 来做这样的事情。如下：
@@ -2659,7 +2656,6 @@ public class MyServletContextListener implements ApplicationListener<ContextRefr
         application.setAttribute("user", user);
     }
 }
-1234567891011121314151617181920
 ```
 
 正如注释中描述的一样，首先通过 contextRefreshedEvent 来获取 application 上下文，再通过 application 上下文来获取 UserService 这个 bean，项目中可以根据实际业务场景，也可以获取其他的 bean，然后再调用自己的业务代码获取相应的数据，最后存储到 application 域中，这样前端在请求相应数据的时候，我们就可以直接从 application 域中获取信息，减少数据库的压力。下面写一个 Controller 直接从 application 域中获取 user 信息来测试一下。
@@ -2714,7 +2710,6 @@ public class MyHttpSessionListener implements HttpSessionListener {
         httpSessionEvent.getSession().getServletContext().setAttribute("count", count);
     }
 }
-1234567891011121314151617181920212223242526272829
 ```
 
 可以看出，首先该监听器需要实现 HttpSessionListener 接口，然后重写 `sessionCreated` 和 `sessionDestroyed` 方法，在 `sessionCreated` 方法中传递一个 HttpSessionEvent 对象，然后将当前 session 中的用户数量加1，`sessionDestroyed` 方法刚好相反，不再赘述。然后我们写一个 Controller 来测试一下。
@@ -2735,7 +2730,6 @@ public class TestController {
         return "当前在线人数：" + count;
     }
 }
-123456789101112131415
 ```
 
 该 Controller 中是直接获取当前 session 中的用户数量，启动服务器，在浏览器中输入 `localhost:8080/listener/total` 可以看到返回的结果是1，再打开一个浏览器，请求相同的地址可以看到 count 是 2 ，这没有问题。但是如果关闭一个浏览器再打开，理论上应该还是2，但是实际测试却是 3。原因是 session 销毁的方法没有执行（可以在后台控制台观察日志打印情况），当重新打开时，服务器找不到用户原来的 session，于是又重新创建了一个 session，那怎么解决该问题呢？我们可以将上面的 Controller 方法改造一下：
@@ -2757,7 +2751,6 @@ public String getTotalUser(HttpServletRequest request, HttpServletResponse respo
     Integer count = (Integer) request.getSession().getServletContext().getAttribute("count");
     return "当前在线人数：" + count;
 }
-12345678910111213141516
 ```
 
 可以看出，该处理逻辑是让服务器记得原来那个 session，即把原来的 sessionId 记录在浏览器中，下次再打开时，把这个 sessionId 传过去，这样服务器就不会重新再创建了。重启一下服务器，在浏览器中再次测试一下，即可避免上面的问题。
@@ -2807,7 +2800,6 @@ public String getRequestInfo(HttpServletRequest request) {
     System.out.println("requestListener中的初始化的name数据：" + request.getAttribute("name"));
     return "success";
 }
-12345
 ```
 
 ## 3. Spring Boot中自定义事件监听
@@ -2835,7 +2827,6 @@ public class MyEvent extends ApplicationEvent {
 
     // 省去get、set方法
 }
-12345678910111213141516
 ```
 
 ### 3.2 自定义监听器
@@ -2860,7 +2851,6 @@ public class MyEventListener implements ApplicationListener<MyEvent> {
 
     }
 }
-1234567891011121314151617
 ```
 
 然后重写 `onApplicationEvent` 方法，将自定义的 MyEvent 事件传进来，因为该事件中，我们定义了 User 对象（该对象在实际中就是需要处理的数据，在下文来模拟），然后就可以使用该对象的信息了。
@@ -2963,7 +2953,6 @@ public class MyInterceptor implements HandlerInterceptor {
         logger.info("整个请求都处理完咯，DispatcherServlet也渲染了对应的视图咯，此时我可以做一些清理的工作了");
     }
 }
-123456789101112131415161718192021222324252627282930
 ```
 
 OK，到此为止，拦截器已经定义完成，接下来就是对该拦截器进行拦截配置。
@@ -2982,7 +2971,6 @@ public class MyInterceptorConfig extends WebMvcConfigurationSupport {
         super.addInterceptors(registry);
     }
 }
-123456789
 ```
 
 在该配置中重写 `addInterceptors` 方法，将我们上面自定义的拦截器添加进去，`addPathPatterns` 方法是添加要拦截的请求，这里我们拦截所有的请求。这样就配置好拦截器了，接下来写一个 Controller 测试一下：
@@ -2997,7 +2985,6 @@ public class InterceptorController {
         return "hello";
     }
 }
-123456789
 ```
 
 让其跳转到 hello.html 页面，直接在 hello.html 中输出 `hello interceptor` 即可。启动项目，在浏览器中输入 `localhost:8080/interceptor/test` 看一下控制台的日志：
@@ -3029,7 +3016,6 @@ protected void addResourceHandlers(ResourceHandlerRegistry registry) {
     registry.addResourceHandler("/**").addResourceLocations("classpath:/static/");
     super.addResourceHandlers(registry);
 }
-123456789
 ```
 
 这样配置好之后，重启项目，静态资源也可以正常访问了。如果你是个善于学习或者研究的人，那肯定不会止步于此，没错，上面这种方式的确能解决静态资源无法访问的问题，但是，还有更方便的方式来配置。
@@ -3045,7 +3031,6 @@ public class MyInterceptorConfig implements WebMvcConfigurer {
         registry.addInterceptor(new MyInterceptor()).addPathPatterns("/**");
     }
 }
-12345678
 ```
 
 这样就非常方便了，实现 WebMvcConfigure 接口的话，不会拦截 Spring Boot 默认的静态资源。
@@ -3077,7 +3062,6 @@ public boolean preHandle(HttpServletRequest request, HttpServletResponse respons
     // 返回true才会继续执行，返回false则取消当前请求
     return true;
 }
-123456789101112131415161718
 ```
 
 重启项目，在浏览器中输入 `localhost:8080/interceptor/test` 后查看控制台日志，发现被拦截，如果在浏览器中输入 `localhost:8080/interceptor/test?token=123` 即可正常往下走。
@@ -3096,7 +3080,6 @@ public boolean preHandle(HttpServletRequest request, HttpServletResponse respons
 @Retention(RetentionPolicy.RUNTIME)
 public @interface UnInterception {
 }
-1234567
 ```
 
 然后在 Controller 中的某个方法上添加该注解，在拦截器处理方法中添加该注解取消拦截的逻辑，如下：
@@ -3119,7 +3102,6 @@ public boolean preHandle(HttpServletRequest request, HttpServletResponse respons
     // 返回true才会继续执行，返回false则取消当前请求
     return true;
 }
-1234567891011121314151617
 ```
 
 Controller 中的方法代码可以参见源码，重启项目在浏览器中输入 `http://localhost:8080/interceptor/test2?token=123` 测试一下，可以看出，加了该注解的方法不会被拦截。
@@ -3152,7 +3134,6 @@ Redis 集群和 Mysql 是同步的，首先会从 redis 中获取数据，如果
 
 ```
 yum install gcc-c++
-1
 ```
 
 - 下载 redis
@@ -3161,14 +3142,12 @@ yum install gcc-c++
 
 ```
 wget http://download.redis.io/releases/redis-3.2.8.tar.gz
-1
 ```
 
 如果没有安装过 wget，可以通过如下命令安装：
 
 ```
 yum install wget
-1
 ```
 
 - 解压安装
@@ -3177,7 +3156,6 @@ yum install wget
 
 ```
 tar –vzxf redis-3.2.8.tar.gz
-1
 ```
 
 然后将解压的文件夹 redis-3.2.8 放到 `/usr/local/` 下，一般安装软件都放在 `/usr/local` 下。然后进入 `/usr/local/redis-3.2.8/` 文件夹下，执行 `make` 命令即可完成安装。
@@ -3186,7 +3164,6 @@ tar –vzxf redis-3.2.8.tar.gz
 ```
 make MALLOC=libc
 make install
-12
 ```
 
 - 修改配置文件
@@ -3197,7 +3174,6 @@ make install
 
 ```
 bind 0.0.0.0
-1
 ```
 
 使用同样的方法，将 daemonize 改成 yes （默认为 no），允许 redis 在后台执行。
@@ -3209,14 +3185,12 @@ bind 0.0.0.0
 
 ```
 redis-server ./redis.conf
-1
 ```
 
 再启动 redis 客户端：
 
 ```
 redis-cli
-1
 ```
 
 由于我们设置了密码，在启动客户端之后，输入 `auth 123456` 即可登录进入客户端。
@@ -3224,14 +3198,12 @@ redis-cli
 
 ```
 set name CSDN
-1
 ```
 
 然后来获取 name
 
 ```
 get name
-1
 ```
 
 如果正常获取到 CSDN，则说明没有问题。
@@ -3284,7 +3256,6 @@ spring:
         max-active: 1000
         # 等待可用连接的最大时间，单位毫秒，默认值为-1，表示永不超时。如果超过等待时间，则直接抛出JedisConnectionException
         max-wait: 2000
-123456789101112131415161718192021
 ```
 
 ### 3.3 常用 api 介绍
@@ -3321,7 +3292,6 @@ public class RedisService {
     public String getString(String key){
         return stringRedisTemplate.opsForValue().get(key);
     }
-1234567891011121314151617181920212223
 ```
 
 该对象操作的是 string，我们也可以存实体类，只需要将实体类转换成 json 字符串即可。下面来测试一下：
@@ -3348,7 +3318,6 @@ public class Course14ApplicationTests {
         logger.info("用户信息：{}", redisService.getString("userInfo"));
     }
 }
-123456789101112131415161718192021
 ```
 
 先启动 redis，然后运行这个测试用例，观察控制台打印的日志如下：
@@ -3356,7 +3325,6 @@ public class Course14ApplicationTests {
 ```
 我的微信公众号为：程序员私房菜
 用户信息：{"password":"123456","username":"CSDN"}
-12
 ```
 
 #### 3.3.2 redis:hash 类型
@@ -3448,7 +3416,6 @@ public class RedisService {
         return stringRedisTemplate.opsForList().range(key, start, end);
     }
 }
-12345678910111213141516171819202122232425262728
 ```
 
 可以看出，这些 api 都是一样的形式，方便记忆也方便使用。具体的 api 细节我就不展开了，大家可以自己看 api 文档。其实，这些 api 根据参数和返回值也能知道它们是做什么用的。来测试一下：
@@ -3474,7 +3441,6 @@ public class Course14ApplicationTests {
         }
     }
 }
-1234567891011121314151617181920
 ```
 
 ## 4. 总结
@@ -3853,7 +3819,6 @@ Spring Boot 2.0.3 集成 Shiro 需要导入如下 starter 依赖：
     <artifactId>shiro-spring</artifactId>
     <version>1.4.0</version>
 </dependency>
-12345
 ```
 
 ### 2.2 数据库表数据初始化
@@ -3962,7 +3927,6 @@ public class MyRealm extends AuthorizingRealm {
         }
     }
 }
-1234567891011121314151617181920212223242526272829303132333435363738
 ```
 
 从上面两个方法中可以看出：验证身份的时候是根据用户输入的用户名先从数据库中查出该用户名对应的用户，这时候并没有涉及到密码，也就是说到这一步的时候，即使用户输入的密码不对，也是可以查出来该用户的，然后将该用户的正确信息封装到 authcInfo 中返回给 Shiro，接下来就是Shiro的事了，它会根据这里面的真实信息与用户前台输入的用户名和密码进行校验， 这个时候也要校验密码了，如果校验通过就让用户登录，否则跳转到指定页面。同理，权限验证的时候也是先根据用户名从数据库中获取与该用户名有关的角色和权限，然后封装到 authorizationInfo 中返回给 Shiro。
@@ -3990,7 +3954,6 @@ public class ShiroConfig {
         return myRealm;
     }
 }
-12345678910111213141516
 ```
 
 配置安全管理器 SecurityManager：
@@ -4013,7 +3976,6 @@ public class ShiroConfig {
         return securityManager;
     }
 }
-1234567891011121314151617
 ```
 
 配置 SecurityManager 时，需要将上面的自定义 realm 添加进来，这样的话 Shiro 才会走到自定义的 realm 中。
