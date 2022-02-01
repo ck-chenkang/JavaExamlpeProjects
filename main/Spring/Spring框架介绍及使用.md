@@ -406,8 +406,8 @@ spring配置
      初始化：@PostConstruct 销毁：@PreDestroy
 
   5. 作用域
-    @Scope("prototype") 多例
-    注解使用前提，添加命名空间，让spring扫描含有注解类
+      @Scope("prototype") 多例
+      注解使用前提，添加命名空间，让spring扫描含有注解类
 
 ```xml
 
@@ -455,6 +455,7 @@ spring配置
 4.advice 通知/增强，增强代码。例如：after、before
 
 5.Weaving(织入):是指把增强advice应用到目标对象target来创建新的代理对象proxy的过程.
+
 6.proxy 代理类
 
 7.Aspect(切面): 是切入点pointcut和通知advice的结合
@@ -496,6 +497,8 @@ public class MyAspect {
 ```
 
 3.工厂类：编写工厂生成代理
+
+
 
 ```java
 public class MyBeanFactory {
