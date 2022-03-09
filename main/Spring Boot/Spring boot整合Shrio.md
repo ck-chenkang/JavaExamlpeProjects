@@ -1,8 +1,10 @@
 # Spring Boot 整合Shrio
 
-[SpringBoot整合Shiro（完整版）](https://blog.csdn.net/qq_40205116/article/details/104946528?ops_request_misc=%257B%2522request%255Fid%2522%253A%2522164672753216780264055711%2522%252C%2522scm%2522%253A%252220140713.130102334..%2522%257D&request_id=164672753216780264055711&biz_id=0&utm_medium=distribute.pc_search_result.none-task-blog-2~all~top_positive~default-2-104946528.pc_search_result_control_group&utm_term=shrio&spm=1018.2226.3001.4187)
+[SpringBoot整合Shrio（完整版）](https://blog.csdn.net/qq_40205116/article/details/104946528?ops_request_misc=%257B%2522request%255Fid%2522%253A%2522164672753216780264055711%2522%252C%2522scm%2522%253A%252220140713.130102334..%2522%257D&request_id=164672753216780264055711&biz_id=0&utm_medium=distribute.pc_search_result.none-task-blog-2~all~top_positive~default-2-104946528.pc_search_result_control_group&utm_term=shrio&spm=1018.2226.3001.4187)
 
-​                                            
+[案例代码](https://github.com/machaoyin/springboot-shrio)                                            
+
+[shrio小白教程--里面也有Springboot整合Shrio相关操作，而且更详细](https://github.com/ck-chenkang/JavaExamlpeProjects/blob/master/main/Shrio/Shrio%E5%B0%8F%E7%99%BD%E6%95%99%E7%A8%8B.md)
 
 > ★ 
 >
@@ -105,19 +107,17 @@ Apache Shiro 是 Java 的一个安全（权限）框架。 Shiro 可以非常容
 创建一个SprintBoot项目，添加项目需要的依赖（这里持久层使用的是SpringDataJpa）。
  **Shiro依赖**
 
-```
+```xml
 <dependency>
 	<groupId>org.apache.shiro</groupId>
 	<artifactId>shiro-spring</artifactId>
 	<version>1.4.0</version>
 </dependency>
-
-12345
 ```
 
 **pom.xml完整依赖代码**
 
-```
+```xml
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
@@ -183,8 +183,6 @@ Apache Shiro 是 Java 的一个安全（权限）框架。 Shiro 可以非常容
 		</plugins>
 	</build>
 </project>
-
-1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950515253545556575859606162636465
 ```
 
 ### 2、项目结构
@@ -193,7 +191,7 @@ Apache Shiro 是 Java 的一个安全（权限）框架。 Shiro 可以非常容
 
 ### 3、配置链接数据库属性
 
-```
+```ini
 spring.datasource.url=jdbc:mysql://localhost:3306/shiro?serverTimezone=GMT%2B8
 spring.datasource.username=root
 spring.datasource.password=root
@@ -206,8 +204,6 @@ spring.jpa.properties.hibernate.enable_lazy_load_no_trans=true
 
 server.port=80
 server.servlet.context-path=/shiro
-
-123456789101112
 ```
 
 ## **编写代码**
@@ -216,7 +212,7 @@ server.servlet.context-path=/shiro
 
 菜单表实体类TbMenu，Spring-Data-Jpa可以根据实体类去数据库新建或更新对应的表结构，详情可以访问[Spring-Data-Jpa入门](https://blog.csdn.net/qq_40205116/article/details/103039936)
 
-```
+```java
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.data.annotation.CreatedBy;
 import javax.persistence.*;
@@ -293,13 +289,11 @@ public class TbMenu {
         this.children = children;
     }
 }
-
-12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535455565758596061626364656667686970717273747576
 ```
 
 角色及权限表SysRole，parent 为null时为角色，不为null时为权限。
 
-```
+```java
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.data.annotation.CreatedBy;
 import javax.persistence.*;
@@ -367,13 +361,11 @@ public class SysRole {
         this.idx = idx;
     }
 }
-
-12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535455565758596061626364656667
 ```
 
 最后实现的就是用户管理了，只需要对添加的用户分配对应的角色就可以了，用户登录时，显示角色对应的权限。
 
-```
+```java
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -438,15 +430,13 @@ public class SysUser {
         this.roles = roles;
     }
 }
-
-12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535455565758596061626364
 ```
 
 ### 2、Shiro配置类
 
 Shiro配置类ShiroConfig。
 
-```
+```java
 import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
@@ -524,13 +514,11 @@ public class ShiroConfig {
         return securityManager;
     }
 }
-
-1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950515253545556575859606162636465666768697071727374757677
 ```
 
 自定义Realm用于查询用户的角色和权限信息并保存到权限管理器中。代码如下：
 
-```
+```java
 import com.mcy.springbootshiro.entity.SysRole;
 import com.mcy.springbootshiro.entity.SysUser;
 import com.mcy.springbootshiro.service.SysUserService;
@@ -605,13 +593,11 @@ public class UserRealm extends AuthorizingRealm {
                 credentialsSalt, getName());
     }
 }
-
-1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950515253545556575859606162636465666768697071727374
 ```
 
 其中密码加密使用的是MD5加密，加密代码如下：
 
-```
+```java
 public static void main(String[] args){
     String hashAlgorithName = "MD5";
     //加密密码
@@ -623,8 +609,6 @@ public static void main(String[] args){
     Object obj = new SimpleHash(hashAlgorithName, password, credentialsSalt, hashIterations);
     System.out.println(obj);
 }
-
-1234567891011
 ```
 
 ### 3、编写控制器
@@ -632,7 +616,7 @@ public static void main(String[] args){
 新建IndexController测试控制器。这里持久层框架使用的是SpringDataJpa，查询只需遵循查询方法命名规范即可，所以这里就直接写控制器代码了。想进一步了解SpringDataJpa的小伙伴，请移步：[Spring-Data-Jpa入门。](https://blog.csdn.net/qq_40205116/article/details/103039936)
  IndexController控制器代码如下：
 
-```
+```java
 import com.mcy.springbootshiro.entity.SysRole;
 import com.mcy.springbootshiro.entity.SysUser;
 import com.mcy.springbootshiro.service.SysRoleService;
@@ -721,8 +705,6 @@ public class IndexController {
         return "user";
     }
 }
-
-12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535455565758596061626364656667686970717273747576777879808182838485868788
 ```
 
 ### 4、编写页面
@@ -730,7 +712,7 @@ public class IndexController {
 页面内容都比较简单，主要为一个登录页面，登录成功后的页面和几个访问页面。
  登录页面login.html代码如下（测试页面写的比较简单，页面中font标签为登录失败的提示信息，内容为后台传递过来的）：
 
-```
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -764,13 +746,11 @@ public class IndexController {
     </div>
 </body>
 </html>
-
-123456789101112131415161718192021222324252627282930313233
 ```
 
 登录成功main.html页面（几个页面跳转超链接）
 
-```
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -783,13 +763,11 @@ public class IndexController {
     <li><a href="logout">退出登录</a></li> 
 </body>
 </html>
-
-123456789101112
 ```
 
 管理员权限才能访问的页面system.html
 
-```
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -800,13 +778,11 @@ public class IndexController {
     管理员权限，才能访问
 </body>
 </html>
-
-12345678910
 ```
 
 登录即可访问的页面user.html
 
-```
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -817,13 +793,11 @@ public class IndexController {
     登录后即可访问
 </body>
 </html>
-
-12345678910
 ```
 
 没有权限访问的页面，提示页面unAuth.html
 
-```
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -834,8 +808,6 @@ public class IndexController {
 <p>您暂时没有权限访问该页面</p>
 </body>
 </html>
-
-12345678910
 ```
 
 ## **测试**

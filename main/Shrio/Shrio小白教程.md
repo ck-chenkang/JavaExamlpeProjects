@@ -86,8 +86,6 @@
      <artifactId>shiro-core</artifactId>
      <version>1.5.3</version>
    </dependency>
-   
-   12345
    ```
 
 2. 引入shiro配置文件`shiro.ini`，并加入以下配置
@@ -98,8 +96,6 @@
    # 用户名=密码
    christy=123456
    tide=654321
-   
-   12345
    ```
 
    > shiro的配置文件是一个.ini文件，类似于.txt文件
@@ -149,8 +145,6 @@
            }
        }
    }
-   
-   1234567891011121314151617181920212223242526272829303132333435363738
    ```
 
    > 认证的几种状态
@@ -209,8 +203,6 @@
 
 ```java
 protected abstract AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection var1);
-
-1
 ```
 
 SimpleAccountRealm就是复写了`AuthorizingRealm`中的这个抽象方法实现的用户认证，所以后面我们需要自定义认证的时候我们就可以自定义一个realm继承自`AuthorizingRealm`来复写doGetAuthorizationInfo，在这个方法里面实现我们自己的认证逻辑
@@ -219,8 +211,6 @@ SimpleAccountRealm就是复写了`AuthorizingRealm`中的这个抽象方法实�
 
 ```java
 protected abstract AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken var1) throws AuthenticationException;
-
-1
 ```
 
 这个方法是实现用户授权的方法。
@@ -274,8 +264,6 @@ public class CustomerRealm extends AuthorizingRealm {
         return null;
     }
 }
-
-12345678910111213141516171819202122232425262728293031323334
 ```
 
 ## **CustomerRealmAuthenticatorTest**
@@ -314,8 +302,6 @@ public class CustomerRealmAuthenticatorTest {
         }
     }
 }
-
-123456789101112131415161718192021222324252627282930313233
 ```
 
 ## **测试**
@@ -350,8 +336,6 @@ public class ShiroMD5Test {
         System.out.println(md5Hash03.toHex());
     }
 }
-
-1234567891011121314151617
 ```
 
 运行结果如下
@@ -360,8 +344,6 @@ public class ShiroMD5Test {
 e10adc3949ba59abbe56e057f20f883e
 9eab7472e164bb8c1b823ae960467f74
 41a4e25bcf1272844e38b19047dd68a0
-
-123
 ```
 
 # **Shiro中自定义加密Realm**
@@ -404,8 +386,6 @@ public class CustomerMD5Realm extends AuthorizingRealm {
         return null;
     }
 }
-
-1234567891011121314151617181920212223242526272829303132333435
 ```
 
 ## **CustomerMD5AuthenticatorTest**
@@ -453,8 +433,6 @@ public class CustomerMD5AuthenticatorTest {
         }
     }
 }
-
-123456789101112131415161718192021222324252627282930313233343536373839404142
 ```
 
 ## **测试**
@@ -483,8 +461,6 @@ RBAC基于角色的访问控制（Role-Based Access Control）是以角色为中
 if(subject.hasRole("admin")){
    //操作什么资源
 }
-
-123
 ```
 
 ### 基于资源的访问控制
@@ -498,8 +474,6 @@ if(subject.isPermission("user:update:01")){ //资源实例
 if(subject.isPermission("user:update:*")){  //资源类型
   //对01用户进行修改
 }
-
-123456
 ```
 
 ## **权限字符串**
@@ -523,8 +497,6 @@ if(subject.hasRole("admin")) {
 } else {
 	//无权限
 }
-
-123456
 ```
 
 ### 注解式
@@ -534,8 +506,6 @@ if(subject.hasRole("admin")) {
 public void hello() {
 	//有权限
 }
-
-1234
 ```
 
 ### 标签式
@@ -546,8 +516,6 @@ JSP/GSP 标签：在JSP/GSP 页面通过相应的标签完成：
 	<!— 有权限—>
 </shiro:hasRole>
 注意: Thymeleaf 中使用shiro需要额外集成!
-
-12345
 ```
 
 ## **授权的实现**
@@ -607,8 +575,6 @@ public class CustomerMD5Realm extends AuthorizingRealm {
         return null;
     }
 }
-
-1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950
 ```
 
 ### CustomerMD5AuthenticatorTest
@@ -687,8 +653,6 @@ public class CustomerMD5AuthenticatorTest {
         }
     }
 }
-
-12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535455565758596061626364656667686970717273
 ```
 
 ### 测试
@@ -717,8 +681,6 @@ false
 用户名: christy
 用户名: christy
 true
-
-1234567891011121314151617181920212223
 ```
 
 # **Springboot整合Shiro**
@@ -743,8 +705,6 @@ true
     <artifactId>jstl</artifactId>
     <version>1.2</version>
 </dependency>
-
-1234567891011
 ```
 
 ### webapp目录
@@ -765,8 +725,6 @@ true
         hello world!
     </body>
 </html>
-
-12345678910111213
 ```
 
 ### application.yml配置jsp模板
