@@ -3359,7 +3359,6 @@ public class RedisService {
         return (String) stringRedisTemplate.opsForHash().get(key, filedkey);
     }
 }
-123456789101112131415161718192021222324252627
 ```
 
 可以看出，hash 和 string 没啥两样，只不过多了个参数，Spring Boot 中操作 redis 非常简单方便。来测试一下：
@@ -3380,7 +3379,6 @@ public class Course14ApplicationTests {
         logger.info("用户姓名：{}", redisService.getHash("user","name"));
     }
 }
-123456789101112131415
 ```
 
 #### 3.3.3 redis:list 类型
@@ -4633,7 +4631,6 @@ public class IndexController {
         return "result";
     }
 }
-1234567891011121314151617181920
 ```
 
 直接返回到 result.html 页面，该页面主要来展示一下 model 中的数据即可。
@@ -4651,7 +4648,6 @@ public class IndexController {
 </div>
 </body>
 </html>
-123456789101112
 ```
 
 这里注意一下，不能使用 `th:test`，否则字符串中的 html 标签都会被转义，不会被渲染到页面。下面启动服务，在浏览器中输入 `http://localhost:8080/lucene/test`，测试一下效果，我们搜索的是 “南京文化”。
@@ -4748,7 +4744,6 @@ public class JsonResult<T> {
 
     // 省去get和set方法
 }
-12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535455565758596061
 ```
 
 大家可以根据自己项目中所需要的一些东西，合理的修改统一结构中的字段信息。
@@ -4778,7 +4773,6 @@ public class JacksonConfig {
         return objectMapper;
     }
 }
-1234567891011121314151617181920
 ```
 
 这里先不测试，等下面 swagger2 配置好了之后，我们一起来测试一下。
@@ -4826,7 +4820,6 @@ public class SwaggerConfig {
                 .build();
     }
 }
-1234567891011121314151617181920212223242526272829303132333435363738
 ```
 
 到这里，可以先测试一下，写一个 Controller，弄一个静态的接口测试一下上面集成的内容。
@@ -4846,7 +4839,6 @@ public class UserController {
         return new JsonResult<>(user);
     }
 }
-1234567891011121314
 ```
 
 然后启动项目，在浏览器中输入 `localhost:8080/swagger-ui.html` 即可看到 swagger 接口文档页面，调用一下上面这个接口，即可看到返回的 json 数据。
@@ -4881,7 +4873,6 @@ mybatis:
     map-underscore-to-camel-case: true # 驼峰命名规范
   mapper-locations: # mapper映射文件位置
     - classpath:mapper/*.xml
-12345678910111213141516171819202122232425
 ```
 
 配置好了之后，接下来我们来写一下 dao 层，实际中我们使用注解比较多，因为比较方便，当然也可以使用 xml 的方式，甚至两种同时使用都行，这里我们主要使用注解的方式来集成，关于 xml 的方式，大家可以查看前面课程，实际中根据项目情况来定。
@@ -4902,7 +4893,6 @@ public interface UserMapper {
     @Select("select * from user")
     List<User> getAll();
 }
-123456789101112131415
 ```
 
 关于 service 层我就不在文章中写代码了，大家可以结合我的源代码学习，这一节主要带领大家来搭建一个 Spring Boot 空架构。最后别忘了在启动类上添加注解扫描 `@MapperScan("com.itcodai.course18.dao")`
@@ -4951,7 +4941,6 @@ public class MyInterceptorConfig implements WebMvcConfigurer {
                 .excludePathPatterns("/swagger-resources/**");
     }
 }
-123456789101112
 ```
 
 在 Spring Boot 中，我们通常会在如下目录里存放一些静态资源：
@@ -5003,7 +4992,6 @@ public enum BusinessMsgEnum {
     }
 
 }
-123456789101112131415161718192021222324252627282930313233
 ```
 
 在全局统一异常处理类中，我们一般会对自定义的业务异常最先处理，然后去处理一些常见的系统异常，最后会来一个一劳永逸（Exception 异常）。
@@ -5053,7 +5041,6 @@ public class GlobalExceptionHandler {
     }
 
 }
-1234567891011121314151617181920212223242526272829303132333435363738394041424344
 ```
 
 其中，BusinessErrorException 是自定义的业务异常，继承一下 RuntimeException 即可，具体可以看我的源代码，文章中就不贴代码了。
