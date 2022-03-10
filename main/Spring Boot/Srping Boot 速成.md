@@ -721,7 +721,6 @@ public class Test {
     private static final Logger logger = LoggerFactory.getLogger(Test.class);
     // ……
 }
-1234567
 ```
 
 ## 2. application.yml 中对日志的配置
@@ -752,7 +751,6 @@ logging:
 	<property name="LOG_PATTERN" value="%date{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n" />
 	<property name="FILE_PATH" value="D:/logs/course03/demo.%d{yyyy-MM-dd}.%i.log" />
 </configuration>
-1234
 ```
 
 我们来看一下这个定义的含义：首先定义一个格式，命名为 “LOG_PATTERN”，该格式中 `%date` 表示日期，`%thread` 表示线程名，`%-5level` 表示级别从左显示5个字符宽度，`%logger{36}` 表示 logger 名字最长36个字符，`%msg` 表示日志消息，`%n` 是换行符。
@@ -770,7 +768,6 @@ logging:
 		</encoder>
 	</appender>
 </configuration>
-12345678
 ```
 
 使用 `<appender>` 节点设置个控制台输出（`class="ch.qos.logback.core.ConsoleAppender"`）的配置，定义为 “CONSOLE”。使用上面定义好的输出格式（LOG_PATTERN）来输出，使用 `${}` 引用进来即可。
@@ -797,7 +794,6 @@ logging:
 		</encoder>
 	</appender>
 </configuration>
-12345678910111213141516171819
 ```
 
 使用 `<appender>` 定义一个名为 “FILE” 的文件配置，主要是配置日志文件保存的时间、单个日志文件存储的大小、以及文件保存的路径和日志的输出格式。
@@ -812,7 +808,6 @@ logging:
 		<appender-ref ref="FILE" />
 	</root>
 </configuration>
-1234567
 ```
 
 有了上面那些定义后，最后我们使用 `<logger>` 来定义一下项目中默认的日志输出级别，这里定义级别为 INFO，然后针对 INFO 级别的日志，使用 `<root>` 引用上面定义好的控制台日志输出和日志文件的参数。这样 logback.xml 文件中的配置就设置完了。
@@ -848,7 +843,6 @@ public class TestController {
         return "success";
     }
 }
-1234567891011121314151617181920212223242526
 ```
 
 启动该项目，在浏览器中输入 `localhost:8080/test/log` 后可以看到控制台的日志记录：
@@ -858,7 +852,6 @@ public class TestController {
 =====测试日志error级别打印====
 ======测试日志warn级别打印=====
 ======倪升武的个人博客：blog.itcodai.com；倪升武的CSDN博客：blog.csdn.net/eson_15
-1234
 ```
 
 因为 INFO 级别比 DEBUG 级别高，所以 debug 这条没有打印出来，如果将 logback.xml 中的日志级别设置成 DEBUG，那么四条语句都会打印出来，这个大家自己去测试了。同时可以打开 D:\logs\course03\ 目录，里面有刚刚项目启动，以后后面生成的所有日志记录。在项目部署后，我们大部分都是通过查看日志文件来定位问题。
@@ -2671,7 +2664,6 @@ public class TestController {
         return (User) application.getAttribute("user");
     }
 }
-12345678910
 ```
 
 启动项目，在浏览器中输入 `http://localhost:8080/listener/user` 测试一下即可，如果正常返回 user 信息，那么说明数据已经缓存成功。不过 application 这种是缓存在内存中，对内存会有消耗，后面的课程中我会讲到 redis，到时候再给大家介绍一下 redis 的缓存。
@@ -2789,7 +2781,6 @@ public class MyServletRequestListener implements ServletRequestListener {
     }
 
 }
-1234567891011121314151617181920212223242526272829
 ```
 
 这个比较简单，不再赘述，接下来写一个 Controller 测试一下即可。
@@ -2880,7 +2871,6 @@ public class UserService {
         return user;
     }
 }
-12345678910111213141516171819202122
 ```
 
 在 service 中注入 ApplicationContext，在业务代码处理完之后，通过 ApplicationContext 对象手动发布 MyEvent 事件，这样我们自定义的监听器就能监听到，然后处理监听器中写好的业务逻辑。
@@ -2888,12 +2878,19 @@ public class UserService {
 最后，在 Controller 中写一个接口来测试一下：
 
 ```java
-@GetMapping("/request")
-public String getRequestInfo(HttpServletRequest request) {
-    System.out.println("requestListener中的初始化的name数据：" + request.getAttribute("name"));
-    return "success";
+@RestController
+@RequestMapping("/listener")
+public class TestController {
+
+  @Resource
+  private UserService userService;
+
+  @GetMapping("/publish")
+  public User publishEvent() {
+    return userService.getUser2();
+  }
+
 }
-12345
 ```
 
 在浏览器中输入 `http://localhost:8080/listener/publish`，然后观察一下控制台打印的用户名和密码，即可说明自定义监听器已经生效。
@@ -4923,7 +4920,6 @@ public class MyInterceptor implements HandlerInterceptor {
         logger.info("整个请求都处理完咯，DispatcherServlet也渲染了对应的视图咯，此时我可以做一些清理的工作了");
     }
 }
-123456789101112131415161718192021
 ```
 
 然后将自定义的拦截器加入到拦截器配置中。
