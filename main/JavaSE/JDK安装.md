@@ -11,3 +11,17 @@
   - JAVA_HOME把java的根目录放进去
   - Path里面 %JAVA_HOME%\bin
   - 重新打开一个cmd 输入java试一下
+
+### 一、JDK 11（Java 11）之后 JRE 说明
+
+在 JDK 11（Java 11）之后 JRE 是集成在 JDK 之中的，无需我们额外进行环境变量配置，仅需配置 JDK 的 JAVA_HOME 与 Path 变量即可。
+
+JAVA_HOME 变量指向 JDK 根目录，即 bin 目录上一级。
+PATH 变量指向 JDK 的 bin 目录。
+如果切实需要 JRE 的同学或者是了解如何生成 JRE 目录的同学可以参考本文内容。
+
+### 二、win7配置
+
+上面是用户环境变量，下面是系统变量，注意：java11之后不需要配置JRE路径，之前需要配置。
+
+![image-20220725145251279](E:\codes\JavaExamlpeProjects\main\JavaSE\Imag\image-20220725145251279.png)

@@ -13,7 +13,7 @@ binary zip archive和link 下面的 apache-maven-3.8.1-bin.zip
 
 环境变量配置：一个是MAVEN_HOME D:\apache-maven-3.8.1\bin
 一个是M2_HOME D:\apache-maven-3.8.1
-然后 Path目录 %MAVEN_HOME%\bin
+然后 Path目录 %MAVEN_HOME%
 
 cmd mvn -v测试
 
