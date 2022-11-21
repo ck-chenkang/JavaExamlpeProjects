@@ -256,7 +256,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/start")
+@RequestMapping("/start")r
 public class StartController {
 
     @RequestMapping("/springboot")
@@ -271,7 +271,6 @@ public class StartController {
 ```xml
 server:
   port: 8001
-12
 ```
 
 ## 4. 总结
@@ -304,7 +303,6 @@ public @interface RestController {
     <version>2.0.3.RELEASE</version>
     <scope>compile</scope>
 </dependency>
-123456
 ```
 
 Spring Boot 中对依赖都做了很好的封装，可以看到很多 `spring-boot-starter-xxx` 系列的依赖，这是 Spring Boot 的特点之一，不需要人为去引入很多相关的依赖了，starter-xxx 系列直接都包含了所必要的依赖，所以我们再次点进去上面这个 `spring-boot-starter-json` 依赖，可以看到：
@@ -334,7 +332,6 @@ Spring Boot 中对依赖都做了很好的封装，可以看到很多 `spring-bo
     <version>2.9.6</version>
     <scope>compile</scope>
 </dependency>
-123456789101112131415161718192021222324
 ```
 
 到此为止，我们知道了 Spring Boot 中默认使用的 json 解析框架是 jackson。下面我们看一下默认的 jackson 框架对常用数据类型的转 Json 处理。
@@ -354,7 +351,6 @@ public class User {
     private String password;
 	/* 省略get、set和带参构造方法 */
 }
-123456
 ```
 
 ### 1.2 创建Controller类
@@ -400,7 +396,6 @@ public class JsonController {
         return map;
     }
 }
-1234567891011121314151617181920212223242526272829303132333435363738
 ```
 
 ### 1.3 测试不同数据类型返回的json
@@ -411,21 +406,18 @@ OK，写好了接口，分别返回了一个 User 对象、一个 List 集合和
 
 ```json
 {"id":1,"username":"倪升武","password":"123456"}
-1
 ```
 
 在浏览器中输入：`localhost:8080/json/list` 返回 json 如下：
 
 ```json
 [{"id":1,"username":"倪升武","password":"123456"},{"id":2,"username":"达人课","password":"123456"}]
-1
 ```
 
 在浏览器中输入：`localhost:8080/json/map` 返回 json 如下：
 
 ```json
 {"作者信息":{"id":1,"username":"倪升武","password":"123456"},"CSDN地址":"http://blog.csdn.net/eson_15","粉丝数量":4153,"博客地址":"http://blog.itcodai.com"}
-1
 ```
 
 可以看出，map 中不管是什么数据类型，都可以转成相应的 json 格式，这样就非常方便。
@@ -448,22 +440,21 @@ import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 import java.io.IOException;
 
 @Configuration
-public class JacksonConfig {
-    @Bean
-    @Primary
-    @ConditionalOnMissingBean(ObjectMapper.class)
-    public ObjectMapper jacksonObjectMapper(Jackson2ObjectMapperBuilder builder) {
-        ObjectMapper objectMapper = builder.createXmlMapper(false).build();
-        objectMapper.getSerializerProvider().setNullValueSerializer(new JsonSerializer<Object>() {
-            @Override
-            public void serialize(Object o, JsonGenerator jsonGenerator, SerializerProvider serializerProvider) throws IOException {
-                jsonGenerator.writeString("");
-            }
-        });
-        return objectMapper;
+public class JacksonConfig 
+  @Bean
+  @Primary
+  @ConditionalOnMissingBean(ObjectMapper.class)
+  public ObjectMapper jacksonObjectMapper(Jackson2ObjectMapperBuilder builder) {
+  ObjectMapper objectMapper = builder.createXmlMapper(false).build();
+  objectMapper.getSerializerProvider().setNullValueSerializer(new JsonSerializer<Object>() {
+    @Override
+    public void serialize(Object o, JsonGenerator jsonGenerator, SerializerProvider serializerProvider) throws IOException {
+      jsonGenerator.writeString("");
     }
+  });
+  return objectMapper;
 }
-12345678910111213141516171819202122232425262728
+}
 ```
 
 然后我们修改一下上面返回 map 的接口，将几个值改成 null 测试一下：
@@ -479,14 +470,12 @@ public Map<String, Object> getMap() {
     map.put("粉丝数量", 4153);
     return map;
 }
-12345678910
 ```
 
 重启项目，再次输入：`localhost:8080/json/map`，可以看到 jackson 已经将所有 null 字段转成了空字符串了。
 
 ```json
 {"作者信息":{"id":1,"username":"倪升武","password":""},"CSDN地址":"","粉丝数量":4153,"博客地址":"http://blog.itcodai.com"}
-1
 ```
 
 ## 2. 使用阿里巴巴FastJson的设置
