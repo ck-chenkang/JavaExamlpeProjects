@@ -21,6 +21,9 @@
 | 智能补齐                                | Opt + Enter       |      |
 | 快速生成get、 set、 构造函数、 tostring | Cmd + N           |      |
 | 批量重命名                              | shift + F6        |      |
+| 格式化打开                              | opt + cmd + L     |      |
+| 行注释                                  | cmd + /           |      |
+| 块注释                                  | opt + cmd + /     |      |
 
 ## 快速打开
 

@@ -503,7 +503,6 @@ public Map<String, Object> getMap() {
 	<artifactId>fastjson</artifactId>
 	<version>1.2.35</version>
 </dependency>
-12345
 ```
 
 ### 2.2 使用 fastJson 处理 null
@@ -557,14 +556,13 @@ public class fastJsonConfig extends WebMvcConfigurationSupport {
         converters.add(converter);
     }
 }
-12345678910111213141516171819202122232425262728293031323334353637383940414243444546
 ```
 
 ## 3. 封装统一返回的数据结构
 
 以上是 Spring Boot 返回 json 的几个代表的例子，但是在实际项目中，除了要封装数据之外，我们往往需要在返回的 json 中添加一些其他信息，比如返回一些状态码 code ，返回一些 msg 给调用者，这样调用者可以根据 code 或者 msg 做一些逻辑判断。所以在实际项目中，我们需要封装一个统一的 json 返回结构存储返回信息。
 
-### 3.1 定义统一的 json 结构
+### 3.1 定义统一的 json 结构C
 
 由于封装的 json 数据的类型不确定，所以在定义统一的 json 结构时，我们需要用到泛型。统一的 json 结构中属性包括数据、状态码、提示信息即可，构造方法可以根据实际业务需求做相应的添加即可，一般来说，应该有默认的返回结构，也应该有用户指定的返回结构。如下：
 
@@ -614,7 +612,6 @@ public class JsonResult<T> {
     }
     // 省略get和set方法
 }
-123456789101112131415161718192021222324252627282930313233343536373839404142434445
 ```
 
 ### 3.2 修改 Controller 中的返回值类型及测试
@@ -653,28 +650,24 @@ public class JsonResultController {
         return new JsonResult<>(map);
     }
 }
-12345678910111213141516171819202122232425262728293031
 ```
 
 我们重新在浏览器中输入：`localhost:8080/jsonresult/user` 返回 json 如下：
 
 ```json
 {"code":"0","data":{"id":1,"password":"123456","username":"倪升武"},"msg":"操作成功！"}
-1
 ```
 
 输入：`localhost:8080/jsonresult/list`，返回 json 如下：
 
 ```json
 {"code":"0","data":[{"id":1,"password":"123456","username":"倪升武"},{"id":2,"password":"123456","username":"达人课"}],"msg":"获取用户列表成功"}
-1
 ```
 
 输入：`localhost:8080/jsonresult/map`，返回 json 如下：
 
 ```json
 {"code":"0","data":{"作者信息":{"id":1,"password":"","username":"倪升武"},"CSDN地址":null,"粉丝数量":4153,"博客地址":"http://blog.itcodai.com"},"msg":"操作成功！"}
-1
 ```
 
 通过封装，我们不但将数据通过 json 传给前端或者其他接口，还带上了状态码和提示信息，这在实际项目场景中应用非常广泛。
@@ -866,7 +859,6 @@ server:
 url:
   # 订单微服务的地址
   orderUrl: http://localhost:8002
-1234567
 ```
 
 然后在业务代码中如何获取到这个配置的订单服务地址呢？我们可以使用 `@Value` 注解来解决。在对应的类中加上一个属性，在属性上使用 `@Value` 注解即可获取到配置文件中的配置信息，如下：
@@ -893,14 +885,12 @@ public class ConfigController {
         return "success";
     }
 }
-123456789101112131415161718192021
 ```
 
 `@Value` 注解上通过 `${key}` 即可获取配置文件中和 key 对应的 value 值。我们启动一下项目，在浏览器中输入 `localhost:8080/test/config` 请求服务后，可以看到控制台会打印出订单服务的地址：
 
 ```
 =====获取的订单服务地址为：http://localhost:8002
-1
 ```
 
 说明我们成功获取到了配置文件中的订单微服务地址，在实际项目中也是这么用的，后面如果因为服务器部署的原因，需要修改某个服务的地址，那么只要在配置文件中修改即可。
@@ -920,7 +910,6 @@ url:
   userUrl: http://localhost:8003
   # 购物车微服务的地址
   shoppingUrl: http://localhost:8004
-12345678
 ```
 
 也许实际业务中，远远不止这三个微服务，甚至十几个都有可能。对于这种情况，我们可以先定义一个 `MicroServiceUrl` 类来专门保存微服务的 url，如下：
@@ -935,7 +924,6 @@ public class MicroServiceUrl {
     private String shoppingUrl;
     // 省去get和set方法
 }
-123456789
 ```
 
 细心的朋友应该可以看到，使用 `@ConfigurationProperties` 注解并且使用 prefix 来指定一个前缀，然后该类中的属性名就是配置中去掉前缀后的名字，一一对应即可。即：前缀名 + 属性名就是配置文件中定义的 key。同时，该类上面需要加上 `@Component` 注解，把该类作为组件放到Spring容器中，让 Spring 去管理，我们使用的时候直接注入即可。
@@ -948,7 +936,6 @@ public class MicroServiceUrl {
 	<artifactId>spring-boot-configuration-processor</artifactId>
 	<optional>true</optional>
 </dependency>
-12345
 ```
 
 OK，到此为止，我们将配置写好了，接下来写个 Controller 来测试一下。此时，不需要在代码中一个个引入这些微服务的 url 了，直接通过 `@Resource` 注解将刚刚写好配置类注入进来即可使用了，非常方便。如下：
@@ -972,7 +959,6 @@ public class TestController {
         return "success";
     }
 }
-123456789101112131415161718
 ```
 
 再次启动项目，请求一下可以看到，控制台打印出如下信息，说明配置文件生效，同时正确获取配置文件内容：
@@ -982,7 +968,6 @@ public class TestController {
 =====获取的订单服务地址为：http://localhost:8002
 =====获取的用户服务地址为：http://localhost:8003
 =====获取的购物车服务地址为：http://localhost:8004
-1234
 ```
 
 ## 3. 指定项目配置文件
@@ -997,11 +982,11 @@ public class TestController {
 # 开发环境配置文件
 server:
   port: 8001
-123
+
 # 开发环境配置文件
 server:
   port: 8002
-123
+
 ```
 
 然后在 `application.yml` 文件中指定读取哪个配置文件即可。比如我们在开发环境下，指定读取 `applicationn-dev.yml` 文件，如下：
@@ -1011,7 +996,6 @@ spring:
   profiles:
     active:
     - dev
-1234
 ```
 
 这样就可以在开发的时候，指定读取 `application-dev.yml` 文件，访问的时候使用 8001 端口，部署到服务器后，只需要将 `application.yml` 中指定的文件改成 `application-pro.yml` 即可，然后使用 8002 端口访问，非常方便。
@@ -1038,7 +1022,6 @@ Spring Boot 的 MVC 支持主要来介绍实际项目中最常用的几个注解
 public @interface RestController {
     String value() default "";
 }
-12345678
 ```
 
 可以看出， `@RestController` 注解包含了原来的 `@Controller` 和 `@ResponseBody` 注解，使用过 Spring 的朋友对 `@Controller` 注解已经非常了解了，这里不再赘述， `@ResponseBody` 注解是将返回的数据结构转换为 Json 格式。所以 `@RestController` 可以看作是 `@Controller` 和 `@ResponseBody` 的结合体，相当于偷个懒，我们使用 `@RestController` 之后就不用再使用 `@Controller` 了。但是需要注意一个问题：如果是前后端分离，不用模板渲染的话，比如 Thymeleaf，这种情况下是可以直接使用`@RestController` 将数据以 json 格式传给前端，前端拿到之后解析；但如果不是前后端分离，需要使用模板来渲染的话，一般 Controller 中都会返回到具体的页面，那么此时就不能使用`@RestController`了，比如：
@@ -1047,7 +1030,6 @@ public @interface RestController {
 public String getUser() {
 	return "user";
 }
-123
 ```
 
 其实是需要返回到 user.html 页面的，如果使用 `@RestController` 的话，会将 user 作为字符串返回的，所以这时候我们需要使用 `@Controller` 注解。这在下一节 Spring Boot 集成 Thymeleaf 模板引擎中会再说明。
