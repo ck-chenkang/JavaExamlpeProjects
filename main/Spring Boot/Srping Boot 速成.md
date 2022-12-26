@@ -1056,7 +1056,6 @@ public class TestController {
         return "success";
     }
 }
-123456789
 ```
 
 这个很简单，启动项目在浏览器中输入 `localhost:8080/test/get` 测试一下即可。
@@ -1073,7 +1072,6 @@ public String testPathVariable(@PathVariable Integer id) {
 	System.out.println("获取到的id为：" + id);
 	return "success";
 }
-12345
 ```
 
 这里需要注意一个问题，如果想要 url 中占位符中的 id 值直接赋值到参数 id 中，需要保证 url 中的参数和方法接收参数一致，否则就无法接收。如果不一致的话，其实也可以解决，需要用 `@PathVariable` 中的 value 属性来指定对应关系。如下：
@@ -1084,7 +1082,6 @@ public String testPathVariable(@PathVariable(value = "idd") Integer id) {
 	System.out.println("获取到的id为：" + id);
 	return "success";
 }
-12345
 ```
 
 对于访问的 url，占位符的位置可以在任何位置，不一定非要在最后，比如这样也行：`/xxx/{id}/user`。另外，url 也支持多个占位符，方法参数使用同样数量的参数来接收，原理和一个参数是一样的，例如：
@@ -1096,7 +1093,6 @@ public String testPathVariable(@PathVariable(value = "idd") Integer id) {
         System.out.println("获取到的name为：" + name);
         return "success";
     }
-123456
 ```
 
 运行项目，在浏览器中请求 `localhost:8080/test/user/2/zhangsan` 可以看到控制台输出如下信息：
@@ -1159,7 +1155,6 @@ public class User {
 	private String password;
 	// set get
 }
-12345
 ```
 
 使用实体接收的话，我们不能在前面加 `@RequestParam` 注解了，直接使用即可。
@@ -1185,14 +1180,13 @@ public class User {
 	private String password;
 	// set get
 }
-12345
+
 @PostMapping("/user")
 public String testRequestBody(@RequestBody User user) {
 	System.out.println("获取到的username为：" + user.getUsername());
 	System.out.println("获取到的password为：" + user.getPassword());
 	return "success";
 }
-123456
 ```
 
 我们使用 postman 工具来测试一下效果，打开 postman，然后输入请求地址和参数，参数我们用 json 来模拟，如下图所有，调用之后返回 success。
@@ -1204,7 +1198,6 @@ public String testRequestBody(@RequestBody User user) {
 ```
 获取到的username为：倪升武
 获取到的password为：123456
-12
 ```
 
 可以看出，`@RequestBody` 注解用于 POST 请求上，接收 json 实体参数。它和上面我们介绍的表单提交有点类似，只不过参数的格式不同，一个是 json 实体，一个是表单提交。在实际项目中根据具体场景和需要使用对应的注解即可。
