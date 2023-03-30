@@ -60,49 +60,17 @@ slf4j提供了统一的记录日志的接口，对不同日志系统的具体实
 
 ```java
 @SpringBootApplication
-
-
-
 public class SpringbootSlf4jApplication {
-
-
-
- 
-
-
 
     private static final Logger logger = LoggerFactory.getLogger(SpringbootSlf4jApplication.class);
 
-
-
- 
-
-
-
     public static void main(String[] args) {
 
-
-
         logger.info("===============项目启动了===============");
-
-
-
         SpringApplication app = new SpringApplication(SpringbootSlf4jApplication.class);
-
-
-
         app.run(args);
-
-
-
         logger.info("===============启动成功了===============");
-
-
-
     }
-
-
-
 }
 ```
 
@@ -110,73 +78,22 @@ public class SpringbootSlf4jApplication {
 
 ```html
 2020-03-21 11:28:18.017 [main] INFO  com.hl.magic.slf4j.SpringbootSlf4jApplication - ===============项目启动了===============
-
-
-
 2020-03-21 11:28:18.447 [main] INFO  com.hl.magic.slf4j.SpringbootSlf4jApplication - Starting SpringbootSlf4jApplication on DESKTOP-V8RSTKO with PID 17476
-
-
-
 2020-03-21 11:28:18.447 [main] DEBUG com.hl.magic.slf4j.SpringbootSlf4jApplication - Running with Spring Boot v2.1.8.RELEASE, Spring v5.1.9.RELEASE
-
-
-
 2020-03-21 11:28:18.447 [main] INFO  com.hl.magic.slf4j.SpringbootSlf4jApplication - No active profile set, falling back to default profiles: default
-
-
-
 2020-03-21 11:28:19.077 [main] INFO  o.s.boot.web.embedded.tomcat.TomcatWebServer - Tomcat initialized with port(s): 8080 (http)
-
-
-
 2020-03-21 11:28:19.087 [main] INFO  org.apache.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
-
-
-
 2020-03-21 11:28:19.097 [main] INFO  org.apache.catalina.core.StandardService - Starting service [Tomcat]
-
-
-
 2020-03-21 11:28:19.097 [main] INFO  org.apache.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/9.0.24]
-
-
-
 2020-03-21 11:28:19.157 [main] INFO  o.a.c.core.ContainerBase.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
-
-
-
 2020-03-21 11:28:19.157 [main] INFO  org.springframework.web.context.ContextLoader - Root WebApplicationContext: initialization completed in 680 ms
-
-
-
 2020-03-21 11:28:19.287 [main] INFO  o.s.scheduling.concurrent.ThreadPoolTaskExecutor - Initializing ExecutorService 'applicationTaskExecutor'
-
-
-
 2020-03-21 11:28:19.387 [main] INFO  org.apache.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
-
-
-
 2020-03-21 11:28:19.397 [main] INFO  o.a.c.core.ContainerBase.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
-
-
-
 2020-03-21 11:28:19.397 [main] INFO  org.springframework.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
-
-
-
 2020-03-21 11:28:19.407 [main] INFO  org.springframework.web.servlet.DispatcherServlet - Completed initialization in 10 ms
-
-
-
 2020-03-21 11:28:19.410 [main] INFO  o.s.boot.web.embedded.tomcat.TomcatWebServer - Tomcat started on port(s): 8080 (http) with context path ''
-
-
-
 2020-03-21 11:28:19.410 [main] INFO  com.hl.magic.slf4j.SpringbootSlf4jApplication - Started SpringbootSlf4jApplication in 1.323 seconds (JVM running for 2.024)
-
-
-
 2020-03-21 11:28:19.410 [main] INFO  com.hl.magic.slf4j.SpringbootSlf4jApplication - ===============启动成功了===============
 ```
 
@@ -192,41 +109,14 @@ pom.xml中日志依赖配置如下：
 
 ```html
 <dependency>
-
-
-
     <groupId>org.slf4j</groupId>
-
-
-
     <artifactId>slf4j-api</artifactId>
-
-
-
     <version>1.7.30</version>
-
-
-
 </dependency>
-
-
-
     <dependency>
-
-
-
     <groupId>org.slf4j</groupId>
-
-
-
     <artifactId>slf4j-log4j12</artifactId>
-
-
-
     <version>1.7.30</version>
-
-
-
 </dependency>
 ```
 
@@ -240,17 +130,8 @@ application.yml文件是SpringBoot的一个及其重要、核心的配置文件�
 
 ```html
 logging:
-
-
-
   config: /HL/IdeaProjects/SpringBoot-Item/springboot-slf4j/src/main/resources/logback.xml
-
-
-
   level:
-
-
-
     com.hl.magic: trace
 ```
 
@@ -280,157 +161,42 @@ logging.level用来指定具体的包中应用程序日志的输出级别。上�
 
 ```html
 <?xml version="1.0" encoding="UTF-8"?>
-
-
-
 <configuration debug="false">
-
-
-
     <!--定义日志文件的存储地址 勿在 LogBack 的配置中使用相对路径-->
-
-
-
     <property name="LOG_HOME" value="/HL/IdeaProjects/SpringBoot-Item/springboot-slf4j/log"/>
-
-
-
     <!-- 定义日志格式  -->
-
-
-
     <property name="LOG_PATTERN" value="%d{yyyy-MM-dd HH:mm:ss.SSS} [%-5level] [%thread] [%-30.30logger{30}] %msg%n"/>
-
-
-
     <!-- 控制台输出 -->
-
-
-
     <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
-
-
-
         <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
-
-
-
             <!--格式化输出：%d表示日期，%thread表示线程名，%-5level：级别从左显示5个字符宽度%msg：日志消息，%n是换行符-->
-
-
-
             <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50} - %msg%n</pattern>
-
-
-
         </encoder>
-
-
-
     </appender>
-
-
-
     <!-- 按照每天生成日志文件 -->
-
-
-
     <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-
-
-
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-
-
-
             <!--日志文件输出的文件名-->
-
-
-
             <FileNamePattern>${LOG_HOME}/SpringBoot-Slf4j_%d{yyyy-MM-dd}.log</FileNamePattern>
-
-
-
             <!--日志文件保留天数-->
-
-
-
             <MaxHistory>30</MaxHistory>
-
-
-
         </rollingPolicy>
-
-
-
         <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
-
-
-
             <!--格式化输出：%d表示日期，%thread表示线程名，%-5level：级别从左显示5个字符宽度%msg：日志消息，%n是换行符-->
-
-
-
             <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50} - %msg%n</pattern>
-
-
-
         </encoder>
-
-
-
         <!--日志文件最大的大小-->
-
-
-
         <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
-
-
-
             <MaxFileSize>10MB</MaxFileSize>
-
-
-
         </triggeringPolicy>
-
-
-
     </appender>
-
-
-
- 
-
-
-
     <!-- 日志输出级别 -->
-
-
-
     <logger name="org.springframework" level="INFO"/>
-
-
-
     <logger name="com.hl.magic" level="INFO"/>
-
-
-
     <root level="INFO">
-
-
-
         <appender-ref ref="CONSOLE"/>
-
-
-
         <appender-ref ref="FILE"/>
-
-
-
     </root>
-
-
-
 </configuration>
 ```
 
@@ -446,9 +212,6 @@ logback.xml文件中日志存储路径定义：
 
 ```html
 <!--定义日志文件的存储地址 勿在 LogBack 的配置中使用相对路径-->
-
-
-
 <property name="LOG_HOME" value="/HL/IdeaProjects/SpringBoot-Item/springboot-slf4j/log"/>
 ```
 
@@ -464,9 +227,6 @@ logback.xml文件中日志存储路径定义：
 
 ```html
 <!-- 定义日志格式  -->
-
-
-
 <property name="LOG_PATTERN" value="%d{yyyy-MM-dd HH:mm:ss.SSS} [%-5level] [%thread] [%-30.30logger{30}] %msg%n"/>
 ```
 
@@ -490,41 +250,13 @@ logback.xml文件中日志存储路径定义：
 
 ```html
 <!-- 定义控制台输出 -->
-
-
-
 <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
-
-
-
     <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
-
-
-
         <!-- 变量引入  -->
-
-
-
-        <pattern>${LOG_PATTERN}</pattern>
-
-
-
-            
-
-
-
+        <pattern>${LOG_PATTERN}</pattern>   
         <!--格式化输出：%d表示日期，%thread表示线程名，%-5level：级别从左显示5个字符宽度%msg：日志消息，%n是换行符-->
-
-
-
         <!-- <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50} - %msg%n</pattern>-->
-
-
-
     </encoder>
-
-
-
 </appender>
 ```
 
@@ -540,81 +272,23 @@ logback.xml文件中日志存储路径定义：
 
 ```html
 <!-- 按照每天生成日志文件 -->
-
-
-
 <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-
-
-
     <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-
-
-
         <!--日志文件输出的文件名-->
-
-
-
         <FileNamePattern>${LOG_HOME}</FileNamePattern>
-
-
-
         <!--日志文件保留天数-->
-
-
-
         <MaxHistory>30</MaxHistory>
-
-
-
     </rollingPolicy>
-
-
-
     <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
-
-
-
          <!-- 变量引入  -->
-
-
-
-         <pattern>${LOG_PATTERN}</pattern>
-
-
-
-            
-
-
-
+         <pattern>${LOG_PATTERN}</pattern>        
          <!--格式化输出：%d表示日期，%thread表示线程名，%-5level：级别从左显示5个字符宽度%msg：日志消息，%n是换行符-->
-
-
-
          <!-- <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50} - %msg%n</pattern> -->
-
-
-
     </encoder>
-
-
-
     <!--日志文件最大的存储-->
-
-
-
     <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
-
-
-
          <MaxFileSize>10MB</MaxFileSize>
-
-
-
     </triggeringPolicy>
-
-
-
 </appender>
 ```
 
@@ -628,29 +302,11 @@ logback.xml文件中日志存储路径定义：
 
 ```html
 <!-- 日志输出级别 -->
-
-
-
 <logger name="org.springframework" level="ERROR"/>
-
-
-
 <logger name="com.hl.magic" level="ERROR"/>
-
-
-
 <root level="ERROR">
-
-
-
     <appender-ref ref="CONSOLE"/>
-
-
-
     <appender-ref ref="FILE"/>
-
-
-
 </root>
 ```
 
@@ -674,101 +330,26 @@ logback.xml文件中日志存储路径定义：
 
 ```java
 /**
-
-
-
  * 日志输出测试的controller
-
-
-
  */
-
-
-
 @RestController
-
-
-
 @RequestMapping("/loggerItem")
-
-
-
 public class LoggerItemController {
-
-
-
- 
-
-
-
     private static final Logger logger = LoggerFactory.getLogger(LoggerItemController.class);
 
-
-
- 
-
-
-
     @GetMapping("/logInfo")
-
-
-
     public ResponseMessage logTest(){
 
-
-
- 
-
-
-
         logger.debug("=====>测试日志debug级别打印<====");
-
-
-
         logger.info("=====>测试日志info级别打印<=====");
-
-
-
         logger.error("=====>测试日志error级别打印<====");
-
-
-
         logger.warn("=====>测试日志warn级别打印<=====");
-
-
-
- 
-
-
-
         // 使用占位符打印出一些参数信息
-
-
-
         String csdn = "https://blog.csdn.net/qq_27706119";
-
-
-
         String git = "https://github.com/JohnnyHL";
-
-
-
         logger.info("======>AndOne丶的CSDN博客：{}；AndOne丶的GitHub地址：{}；", csdn, git);
-
-
-
- 
-
-
-
         return new ResponseMessage(ResponseStatus.SUCCESS.getStatus(),ResponseStatus.SUCCESS.getMessage());
-
-
-
     }
-
-
-
 }
 ```
 
@@ -778,21 +359,9 @@ public class LoggerItemController {
 
 ```coffeescript
 =====>测试日志debug级别打印<====
-
-
-
 =====>测试日志info级别打印<=====
-
-
-
 =====>测试日志error级别打印<====
-
-
-
 =====>测试日志warn级别打印<=====
-
-
-
 ======>AndOne丶的CSDN博客：https://blog.csdn.net/qq_27706119；AndOne丶的GitHub地址：https://github.com/JohnnyHL；
 ```
 

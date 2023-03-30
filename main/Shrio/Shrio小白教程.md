@@ -882,7 +882,6 @@ public class ShiroConfiguration {
     </body>
 </html>
 
-123456789101112131415
 ```
 
 为了与login.jsp区别开来，我们更改index.jsp的内容如下
@@ -909,8 +908,6 @@ public class ShiroConfiguration {
         </ul>
     </body>
 </html>
-
-123456789101112131415161718192021
 ```
 
 ### 启动
