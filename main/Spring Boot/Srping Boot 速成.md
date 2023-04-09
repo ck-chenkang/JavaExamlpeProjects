@@ -1311,6 +1311,16 @@ public class SwaggerConfig {
 
 ![image-20211129215700559](Imag/image-20211129215700559.png)
 
+### springboot集成swagger2的时候，启动报错，需要在application.yml中添加信息：
+
+```
+   spring:
+      #Use this to befriend spring-boot-starter-actuator & springfox-boot-starter
+       mvc:
+         pathmatch:
+           matching-strategy: ANT_PATH_MATCHER
+```
+
 ## 4. Swagger2 的使用
 
 上面我们已经配置好了 Swagger2，并且也启动测试了一下，功能正常，下面我们开始使用 Swagger2，主要来介绍 Swagger2 中的几个常用的注解，分别在实体类上、 Controller 类上以及 Controller 中的方法上，最后我们看一下 Swagger2 是如何在页面上呈现在线接口文档的，并且结合 Controller 中的方法在接口中测试一下数据。
@@ -1337,7 +1347,6 @@ public class User {
 
 	// 省略set和get方法
 }
-1234567891011121314151617
 ```
 
 解释下 `@ApiModel` 和 `@ApiModelProperty` 注解：
@@ -1400,7 +1409,6 @@ public class TestController {
         // 处理添加逻辑
         return new JsonResult<>();
     }
-123456
 ```
 
 重启项目，在浏览器中输入 `localhost:8080/swagger-ui.html` 看一下效果：
@@ -1665,7 +1673,6 @@ public class JsonResult {
     }
 	// get set
 }
-12345678910111213141516171819202122
 ```
 
 ## 2. 处理系统异常
