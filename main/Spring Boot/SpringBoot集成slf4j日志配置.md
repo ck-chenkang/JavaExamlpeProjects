@@ -391,6 +391,7 @@ public class LoggerItemController {
   <groupId>org.projectlombok</groupId>
   <artifactId>lombok</artifactId>
   <version>xxxx</version>
+    1.18.18
 </dependency>
 ```
 

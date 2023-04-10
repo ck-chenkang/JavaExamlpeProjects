@@ -1865,7 +1865,6 @@ public class BusinessErrorException extends RuntimeException {
     }
 	// get set方法
 }
-1234567891011121314151617181920212223
 ```
 
 在构造方法中，传入我们上面自定义的异常枚举类，所以在项目中，如果有新的异常信息需要添加，我们直接在枚举类中添加即可，很方便，做到统一维护，然后再拦截该异常时获取即可。
@@ -1889,7 +1888,6 @@ public class GlobalExceptionHandler {
         return new JsonResult(code, message);
     }
 }
-123456789101112131415161718
 ```
 
 在业务代码中，我们可以直接模拟一下抛出业务异常，测试一下：
@@ -1917,7 +1915,6 @@ public class ExceptionController {
 
 ```json
 {"code":"500","msg":"系统发生异常，请联系管理员！"}
-1
 ```
 
 ## 4. 总结
@@ -2099,7 +2096,6 @@ public class AopController {
 用户请求的url为：http://localhost:8080/aop/name，ip地址为：0:0:0:0:0:0:0:1  
 ====doAfter方法进入了====  
 方法testAop已经执行完
-12345
 ```
 
 从打印出来的 log 中可以看出程序执行的逻辑与顺序，可以很直观的掌握 `@Before` 和 `@After` 两个注解的实际作用。
@@ -2168,7 +2164,6 @@ public class LogAspectHandler {
         logger.info("执行方法{}出错，异常为：{}", method, ex);
     }
 }
-123456789101112131415161718192021222324
 ```
 
 该方法我就不测试了，大家可以自行测试一下。
