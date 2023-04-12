@@ -2298,7 +2298,6 @@ public class TestController {
 
 ```json
 {"id":2,"username":"CSDN","password":"123456"}
-1
 ```
 
 这里需要注意一下：Spring Boot 如何知道这个 Mapper 呢？一种方法是在上面的 mapper 层对应的类上面添加 `@Mapper` 注解即可，但是这种方法有个弊端，当我们有很多个 mapper 时，那么每一个类上面都得添加 `@Mapper` 注解。另一种比较简便的方法是在 Spring Boot 启动类上添加`@MaperScan` 注解，来扫描一个包下的所有 mapper。如下：
